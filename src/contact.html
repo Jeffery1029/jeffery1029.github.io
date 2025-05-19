@@ -13,13 +13,62 @@
   <title>聯絡我 | 個人資訊網站</title>
   <style>
     .sidebar ul li a { font-size: 14px; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #000;
+      color: #fff;
+    }
+
+    /* 動畫背景 */
+    .background-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      background: linear-gradient(135deg, #000428, #004e92);
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.4);
+      animation: float 15s infinite linear;
+    }
+
+    .particle:nth-child(even) {
+      background: rgba(255, 105, 0, 0.6);
+      box-shadow: 0 0 12px 3px rgba(255, 105, 0, 0.3);
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) translateX(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) translateX(100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+  <style>
     .avatar {
       border-radius: 50%;
     }
   </style>
 </head>
 <body>
-  <button id="lang-toggle" class="lang-float-btn"><i class="fa-solid fa-language"></i> <span>EN</span></button>
   <nav class="sidebar">
     <div class="nav-logo">
       <img src="../public/images/Jeffery2.jpg" alt="Jeffery HU" class="avatar">
@@ -32,9 +81,13 @@
       <li><a href="portfolio.html"><i class="fa-solid fa-image"></i> <span>作品集</span></a></li>
       <li><a href="skills.html"><i class="fa-solid fa-lightbulb"></i> <span>技能</span></a></li>
       <li><a href="contact.html" class="active"><i class="fa-solid fa-envelope"></i> <span>聯絡我</span></a></li>
-      <li><a href="resume.html"><i class="fa-solid fa-file-arrow-down"></i> <span>下載履歷</span></a></li>
     </ul>
   </nav>
+  
+  <div class="background-animation">
+    <!-- 動態生成的粒子 -->
+  </div>
+  
   <section class="contact-section">
   <div class="contact-card">
     <div class="contact-header">
@@ -260,5 +313,38 @@
 
   <!-- 語言切換按鈕樣式已移至 common.css -->
   <script src="./js/i18n.js?v=1.0.3"></script>
+  <script>
+    // 動畫背景粒子效果
+    const particles = [];
+    const numParticles = 80;
+
+    function createParticle() {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      
+      // 隨機位置
+      particle.style.left = Math.random() * 100 + 'vw';
+      particle.style.top = Math.random() * 100 + 'vh';
+      
+      // 隨機大小 - 更大的粒子
+      const size = Math.random() * 15 + 8;
+      particle.style.width = particle.style.height = size + 'px';
+      
+      // 隨機延遲
+      particle.style.animationDelay = Math.random() * 8 + 's';
+      
+      // 隨機動畫持續時間
+      const duration = Math.random() * 10 + 10;
+      particle.style.animationDuration = duration + 's';
+      
+      return particle;
+    }
+
+    for (let i = 0; i < numParticles; i++) {
+      const particle = createParticle();
+      document.querySelector('.background-animation').appendChild(particle);
+      particles.push(particle);
+    }
+  </script>
 </body>
 </html>
