@@ -12,167 +12,170 @@
   <link rel="stylesheet" href="css/common.css">
   <title>個人資訊網站 | 首頁</title>
   <style>
-    @keyframes fadeInUp {
-      0% { opacity: 0; transform: translateY(40px); }
-      100% { opacity: 1; transform: translateY(0); }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #000;
+      color: #fff;
+    }
+
+    /* 動畫背景 */
+    .background-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      background: linear-gradient(135deg, #000428, #004e92);
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.4);
+      animation: float 15s infinite linear;
+    }
+
+    .particle:nth-child(even) {
+      background: rgba(255, 105, 0, 0.6);
+      box-shadow: 0 0 12px 3px rgba(255, 105, 0, 0.3);
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) translateX(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) translateX(100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* 保留的導航欄樣式 */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-logo img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .nav-logo span {
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar ul li {
+      margin: 5px 0;
+    }
+
     .sidebar ul li a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
       font-size: 14px;
     }
-    
-    /* 首頁動畫 */
-    .hero, #featured-works, #news {
-      animation: fadeInUp 0.7s cubic-bezier(.23,1.01,.32,1) both;
+
+    .sidebar ul li a:hover,
+    .sidebar ul li a.active {
+      background: rgba(255, 255, 255, 0.1);
     }
-    
-    /* 延遲動畫 */
-    #featured-works {
-      animation-delay: 0.1s;
+
+    /* 歡迎訊息樣式 */
+    .welcome-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 1;
     }
-    
-    #news {
-      animation-delay: 0.2s;
-    }
-    
-    /* 作品區段樣式 */
-    #featured-works {
-      padding: 2rem 1rem;
-      max-width: 1200px;
-      margin: 0 auto;
-      box-sizing: border-box;
-    }
-    
-    .works-list {
-      display: flex;
-      flex-direction: column;
-      gap: 3rem;
-      width: 100%;
-    }
-    
-    .works-section {
-      width: 100%;
-      background: #f9f9f9;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      box-sizing: border-box;
-    }
-    
-    .category-title {
-      font-size: 1.5rem;
-      color: #333;
-      margin: 0 0 1.5rem 0;
-      padding-bottom: 0.75rem;
-      border-bottom: 2px solid #ff6900;
-      display: block;
-      width: 100%;
-      font-weight: 600;
-    }
-    
-    .works-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
-      width: 100%;
-    }
-    
-    .work-card {
-      background: #fff;
-      border-radius: 10px;
-      padding: 1.75rem;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-      transition: all 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      box-sizing: border-box;
-      border: 1px solid #eee;
-    }
-    
-    /* 響應式設計 */
-    @media (max-width: 900px) {
-      .works-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-    
-    @media (max-width: 600px) {
-      .works-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .works-section {
-        padding: 1.5rem 1rem;
-      }
-    }
-    
-    .work-card h4 {
-      margin-top: 0;
-      margin-bottom: 0.75rem;
-      color: #333;
-      font-weight: 600;
-    }
-    
-    .work-card p {
-      color: #666;
+
+    .welcome-message h1 {
+      font-size: 3rem;
       margin-bottom: 1rem;
+      animation: fadeInUp 1s ease-out forwards;
+      opacity: 0;
     }
-    
-    .work-card a {
-      display: inline-block;
-      color: #ff6900;
-      font-weight: 600;
-      text-decoration: none;
-      font-size: 0.9rem;
-      transition: color 0.2s;
+
+    .welcome-message p {
+      font-size: 1.2rem;
+      opacity: 0;
+      animation: fadeInUp 1s ease-out forwards 0.3s;
     }
-    
-    .work-card a:hover {
-      color: #e05800;
-      text-decoration: underline;
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-    
-    /* 新聞/動態列表 */
-    #news {
-      padding: 2rem 1rem;
-      max-width: 1200px;
-      margin: 2rem auto;
-    }
-    
-    #news h2 {
-      font-size: 1.8rem;
-      color: #333;
-      margin-bottom: 1.5rem;
-    }
-    
-    #news-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    
-    #news-list li {
-      padding: 1rem 1.5rem;
-      border-bottom: 1px solid #eee;
-      color: #444;
-      font-size: 1.05rem;
-    }
-    
-    #news-list li:last-child {
-      border-bottom: none;
+
+    /* 響應式設計 */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 200px;
+      }
+
+      .nav-logo img {
+        width: 50px;
+        height: 50px;
+      }
+
+      .nav-logo span {
+        font-size: 1rem;
+      }
     }
   </style>
-
-  <!-- 首先載入語言切換功能 -->
-  <script src="./js/i18n.js?v=1.0.5"></script>
-  <script>
-    // 調試信息：檢查 i18n.js 是否已載入
-    console.log('i18n.js 已載入，window.worksData:', window.worksData);
-  </script>
 </head>
 <body>
-  <button id="lang-toggle" class="lang-float-btn"><i class="fa-solid fa-language"></i> <span>EN</span></button>
   <nav class="sidebar">
     <div class="nav-logo">
       <img src="../public/images/Jeffery2.jpg" alt="Jeffery HU" class="avatar">
@@ -188,71 +191,48 @@
       <li><a href="resume.html"><i class="fa-solid fa-file-arrow-down"></i> <span>下載履歷</span></a></li>
     </ul>
   </nav>
-  <header class="hero">
-    <h1 id="intro-title">哈囉，我是 Jeffery</h1>
-    <p id="intro-desc">一位專業的網站/程式/APP開發者，熱愛 AI技術以及創新與分享。</p>
-  </header>
   
-  <section id="featured-works">
-    <h2 id="featured-works-title">精選作品</h2>
-    <div class="works-list" id="works-list">
-      <!-- 作品將由 JavaScript 動態產生 -->
-    </div>
-  </section>
-  
-  <section id="news">
-    <h2 id="news-title">近期動態</h2>
-    <ul id="news-list">
-      <!-- 新聞/消息由 JS 動態產生 -->
-    </ul>
-  </section>
-  
-  <footer>
-    <p>&copy; 2025 Jeffery HU x AI x LIFE</p>
-  </footer>
+  <div class="background-animation">
+    <!-- 動態生成的粒子 -->
+  </div>
 
-  <!-- 確保 i18n.js 在 main.js 之前載入 -->
+  <div class="welcome-message">
+    <h1>哈囉，我是 Jeffery</h1>
+    <p>一位專業的網站/程式/APP開發者，熱愛 AI技術以及創新與分享。</p>
+  </div>
+
   <script>
-    // 確保 worksData 在 main.js 執行前就存在於 window 對象上
-    window.worksData = window.worksData || [
-      // 預設作品資料（如果 window.worksData 未載入）
-      { id: 'web1', title: 'UOF Web apps', desc: '企業內部 e 化專案，涉蓋多項流程管理系統', featured: true, category: 'web' },
-      { id: 'web2', title: 'iPAS 考題模擬作答器', desc: '協助考生練習 iPAS 相關考試題目的互動式平台', featured: true, category: 'web' },
-      { id: 'web3', title: 'YouTube 下載器', desc: '提供 YouTube 影片下載與轉檔功能的網頁應用', featured: true, category: 'web' },
-      { id: 'chrome1', title: 'PDF 分割成圖片', desc: 'Chrome 擴充程式，可將 PDF 文件轉換為圖片格式', featured: true, category: 'chrome' },
-      { id: 'ios1', title: 'Explore Note 旅途規劃', desc: '旅途規劃與記錄 iOS 應用程式（建構中）', featured: true, category: 'app' }
-    ];
-    
-    // 確保 newsData 存在
-    window.newsData = window.newsData || [
-      { date: '2025-03-15', content: '發布個人資訊網站 v1.0' },
-      { date: '2025-02-28', content: '完成 Luxgen N7 使用手冊快速搜尋器' },
-      { date: '2025-01-10', content: '開發 YouTube 自動略過廣告擴充功能' }
-    ];
-    
-    console.log('已設置預設的 worksData 和 newsData');
-  </script>
-  
-  <!-- 直接載入 main.js 並添加調試訊息 -->
-  <script>
-    console.log('準備載入 main.js...');
-    window.addEventListener('load', function() {
-      console.log('頁面完全載入，執行初始化...');
+    // 動畫背景粒子效果
+    const particles = [];
+    const numParticles = 80;
+
+    function createParticle() {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
       
-      // 確保 worksData 存在
-      window.worksData = window.worksData || [];
+      // 隨機位置
+      particle.style.left = Math.random() * 100 + 'vw';
+      particle.style.top = Math.random() * 100 + 'vh';
       
-      // 強制觸發渲染
-      if (window.renderWorks) {
-        console.log('調用 renderWorks...');
-        window.renderWorks();
-      } else {
-        console.error('錯誤：renderWorks 函數未定義');
-      }
-    });
+      // 隨機大小 - 更大的粒子
+      const size = Math.random() * 15 + 8;
+      particle.style.width = particle.style.height = size + 'px';
+      
+      // 隨機延遲
+      particle.style.animationDelay = Math.random() * 8 + 's';
+      
+      // 隨機動畫持續時間
+      const duration = Math.random() * 10 + 10;
+      particle.style.animationDuration = duration + 's';
+      
+      return particle;
+    }
+
+    for (let i = 0; i < numParticles; i++) {
+      const particle = createParticle();
+      document.querySelector('.background-animation').appendChild(particle);
+      particles.push(particle);
+    }
   </script>
-  
-  <!-- 直接載入 main.js -->
-  <script src="./js/main.js"></script>
 </body>
 </html>
