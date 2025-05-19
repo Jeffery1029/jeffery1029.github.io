@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="後台登入 - 個人資訊網站">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <title>後台登入 | 個人資訊網站</title>
+</head>
+<body>
+  <nav>
+    <div class="navbar">
+      <div class="nav-logo">
+        <img src="../public/Layout/KAYAK Web 250.png" alt="Logo" style="background:#fff;border-radius:10px;">
+        <span>KAYAK Resume</span>
+      </div>
+      <ul>
+        <li><a href="index.html">回前台</a></li>
+      </ul>
+    </div>
+  </nav>
+  <section style="max-width:400px;margin:5rem auto;">
+    <h1>網站後台登入</h1>
+    <form id="login-form">
+      <label>密碼：<input type="password" id="admin-pw" required></label><br><br>
+      <button type="submit">登入</button>
+    </form>
+    <p id="login-msg" style="color:red;"></p>
+  </section>
+  <script src="js/admin.js"></script>
+</body>
+</html>

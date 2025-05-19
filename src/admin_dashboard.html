@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="後台管理 - 個人資訊網站">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <title>後台管理 | 個人資訊網站</title>
+</head>
+<body>
+  <nav>
+    <div class="navbar">
+      <div class="nav-logo">
+        <img src="../public/Layout/KAYAK Web 250.png" alt="Logo" style="background:#fff;border-radius:10px;">
+        <span>KAYAK Resume</span>
+      </div>
+      <ul>
+        <li><a href="index.html">回前台</a></li>
+        <li><a href="admin_dashboard.html" class="active">後台主控台</a></li>
+        <li><a href="#" id="logout-btn">登出</a></li>
+      </ul>
+    </div>
+  </nav>
+  <section>
+    <h1>後台主控台</h1>
+    <ul>
+      <li><a href="#" onclick="alert('此區可編輯關於我內容（待實作）')">編輯「關於我」</a></li>
+      <li><a href="#" onclick="alert('此區可管理經歷（待實作）')">管理「經歷」</a></li>
+      <li><a href="#" onclick="alert('此區可管理作品集（待實作）')">管理「作品集」</a></li>
+      <li><a href="#" onclick="alert('此區可管理技能與聯絡資訊（待實作）')">管理「技能 / 聯絡資訊」</a></li>
+    </ul>
+    <p style="color:#888;font-size:0.95rem;">（功能可依需求逐步擴充，並可串接 Supabase 雲端資料庫）</p>
+  </section>
+  <script src="js/admin.js"></script>
+</body>
+</html>

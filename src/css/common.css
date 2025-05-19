@@ -1,0 +1,37 @@
+/* 共用樣式，包括語言切換按鈕等 */
+
+/* 語言切換按鈕樣式 */
+.lang-float-btn {
+  position: fixed;
+  top: 22px;
+  right: 32px;
+  z-index: 9999; /* 確保在最上層 */
+  background: #fff;
+  color: #ff6900;
+  border: 1.5px solid #ff6900;
+  border-radius: 2em;
+  padding: 0.45em 1.2em;
+  font-size: 1em;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(255,105,0,0.09);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  transition: background 0.18s, color 0.18s, border 0.18s;
+}
+
+.lang-float-btn:hover {
+  background: #ff6900;
+  color: #fff;
+  border-color: #ff6900;
+}
+
+@media (max-width: 600px) {
+  .lang-float-btn { 
+    right: 12px; 
+    top: 10px; 
+    font-size: 0.98em; 
+    padding: 0.38em 1em; 
+  }
+}

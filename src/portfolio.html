@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="作品集 - 個人資訊網站">
+  <meta property="og:title" content="作品集">
+  <meta property="og:description" content="網站、App、設計、研究等作品展示與篩選。">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/common.css">
+  <title>作品集 | 個人資訊網站</title>
+  <style>
+    .sidebar ul li a { font-size: 14px; }
+    .avatar {
+      border-radius: 50%;
+    }
+    /* 語言切換按鈕樣式已移至 common.css */
+  </style>
+</head>
+<body>
+  <button id="lang-toggle" class="lang-float-btn"><i class="fa-solid fa-language"></i> <span>EN</span></button>
+  <nav class="sidebar">
+    <div class="nav-logo">
+      <img src="../public/images/Jeffery2.jpg" alt="Jeffery HU" class="avatar">
+      <span>Jeffery HU</span>
+    </div>
+    <ul>
+      <li><a href="index.html"><i class="fa-solid fa-house"></i> <span>首頁</span></a></li>
+      <li><a href="about.html"><i class="fa-solid fa-user"></i> <span>關於我</span></a></li>
+      <li><a href="experience.html"><i class="fa-solid fa-briefcase"></i> <span>經歷</span></a></li>
+      <li><a href="portfolio.html" class="active"><i class="fa-solid fa-image"></i> <span>作品集</span></a></li>
+      <li><a href="skills.html"><i class="fa-solid fa-lightbulb"></i> <span>技能</span></a></li>
+      <li><a href="contact.html"><i class="fa-solid fa-envelope"></i> <span>聯絡我</span></a></li>
+      <li><a href="resume.html"><i class="fa-solid fa-file-arrow-down"></i> <span>下載履歷</span></a></li>
+    </ul>
+  </nav>
+  <section class="portfolio-section">
+  <div class="portfolio-card">
+    <div class="portfolio-header">
+      <i class="fa-solid fa-image"></i>
+      <h1>作品集</h1>
+    </div>
+    <div class="portfolio-toolbar">
+      <label for="filter-category">分類：</label>
+      <select id="filter-category">
+        <option value="all">全部</option>
+        <option value="web">網站</option>
+        <option value="app">App</option>
+        <option value="design">設計</option>
+        <option value="research">研究</option>
+      </select>
+      <input type="text" id="search-input" placeholder="搜尋作品...">
+    </div>
+    <div class="works-list" id="portfolio-list">
+      <!-- 作品卡片由 JS 動態產生 -->
+    </div>
+  </div>
+</section>
+<style>
+.portfolio-section {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 70vh;
+  background: none;
+  margin-top: 2.5rem;
+}
+.portfolio-card {
+  background: #fff;
+  border-radius: 2rem;
+  box-shadow: 0 4px 32px 0 rgba(255,91,46,0.08), 0 1.5px 8px 0 rgba(0,0,0,0.08);
+  padding: 2.5rem 2.8rem 2.5rem 2.2rem;
+  max-width: 900px;
+  width: 100%;
+  animation: fadeInUp 0.7s cubic-bezier(.23,1.01,.32,1) 0.1s both;
+}
+.portfolio-header {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  margin-bottom: 1.1em;
+}
+.portfolio-header i {
+  color: var(--main-color, #ff5b2e);
+  font-size: 1.5em;
+  opacity: 0.92;
+}
+.portfolio-header h1 {
+  font-size: 1.28em;
+  font-weight: 700;
+  color: var(--main-color, #ff5b2e);
+  margin: 0;
+}
+.portfolio-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1.2em;
+  flex-wrap: wrap;
+  margin-bottom: 1.4em;
+}
+.portfolio-toolbar label {
+  font-weight: 500;
+}
+.portfolio-toolbar select,
+.portfolio-toolbar input[type="text"] {
+  padding: 0.38rem 1rem;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  font-size: 1em;
+  background: #fafafc;
+  transition: border-color 0.2s;
+}
+.portfolio-toolbar select:focus,
+.portfolio-toolbar input[type="text"]:focus {
+  border-color: #ff5b2e;
+  outline: none;
+}
+.works-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-top: 1.2em;
+}
+.work-card {
+  background: #f9f9fb;
+  border-radius: 1.2em;
+  box-shadow: 0 2px 10px 0 rgba(255,91,46,0.07);
+  padding: 1.2em 1.5em;
+  min-width: 230px;
+  max-width: 320px;
+  flex: 1 1 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
+  transition: box-shadow 0.18s, transform 0.18s;
+}
+.work-card h3 {
+  margin: 0 0 0.3em 0;
+  font-size: 1.15em;
+  color: #ff5b2e;
+}
+.work-card p {
+  margin: 0 0 0.5em 0;
+  color: #444;
+  font-size: 1em;
+}
+.work-card a {
+  align-self: flex-end;
+  color: #fff;
+  background: #ff5b2e;
+  border-radius: 0.7em;
+  padding: 0.3em 1.1em;
+  text-decoration: none;
+  font-size: 0.97em;
+  font-weight: 500;
+  transition: background 0.18s;
+}
+.work-card a:hover {
+  background: #ff7e3c;
+}
+.work-card:hover {
+  box-shadow: 0 6px 24px 0 rgba(255,91,46,0.17);
+  transform: translateY(-4px) scale(1.03);
+}
+@media (max-width: 1000px) {
+  .portfolio-card { max-width: 98vw; padding: 1.2rem 0.5rem 1.2rem 0.5rem; }
+  .works-list { gap: 1rem; }
+}
+@media (max-width: 700px) {
+  .portfolio-card { padding: 1.2rem 0.2rem 1rem 0.2rem; }
+  .works-list { flex-direction: column; gap: 1rem; }
+}
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+</style>
+  <footer>
+    <p>&copy; 2025 [你的名字]</p>
+  </footer>
+  <script src="js/data.js"></script>
+  <script src="js/markdown.js"></script>
+  <script>
+    // 作品篩選與搜尋功能
+    function renderPortfolio() {
+      const list = document.getElementById('portfolio-list');
+      const category = document.getElementById('filter-category').value;
+      const keyword = document.getElementById('search-input').value.trim();
+      list.innerHTML = '';
+      window.worksData.filter(work => {
+        const matchCat = category === 'all' || (work.category === category);
+        const matchKey = !keyword || work.title.includes(keyword) || work.desc.includes(keyword);
+        return matchCat && matchKey;
+      }).forEach(work => {
+        const card = document.createElement('div');
+        card.className = 'work-card';
+        card.innerHTML = `<h3>${work.title}</h3><p>${work.desc}</p><a href="#" class="detail-btn" data-id="${work.id}">詳情</a>`;
+        list.appendChild(card);
+      });
+      // 詳情按鈕事件
+      document.querySelectorAll('.detail-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          showModal(this.getAttribute('data-id'));
+        });
+      });
+    }
+    // 顯示 Modal 並載入 Markdown
+    function showModal(id) {
+      // 目前僅對 p1 (作品A) 顯示 Markdown
+      let mdUrl = '';
+      if (id === 'p1') {
+        mdUrl = '../public/Acheivements/Acheivement01.MD';
+      } else {
+        document.getElementById('modal-title').innerText = '尚未提供';
+        document.getElementById('modal-body').innerHTML = '<p>此作品暫無詳細資料。</p>';
+        document.getElementById('mdModal').style.display = 'block';
+        document.body.classList.add('modal-open');
+        return;
+      }
+      fetch(mdUrl).then(res => res.text()).then(md => {
+        document.getElementById('modal-title').innerText = '艾克爾半導體有限公司 詳細經歷';
+        document.getElementById('modal-body').innerHTML = window.simpleMarkdownToHtml(md);
+        document.getElementById('mdModal').style.display = 'block';
+        document.body.classList.add('modal-open');
+      });
+    }
+    // 關閉 Modal
+    function closeModal() {
+      document.getElementById('mdModal').style.display = 'none';
+      document.body.classList.remove('modal-open');
+    }
+    // Modal 關閉按鈕與遮罩
+    window.addEventListener('DOMContentLoaded', function() {
+      renderPortfolio();
+      document.getElementById('modal-close').addEventListener('click', closeModal);
+      document.getElementById('mdModal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeModal();
+      });
+    });
+  </script>
+  <!-- Bootstrap Modal 樣式與結構 -->
+  <style>
+    .modal-backdrop {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.25); z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  /* 保證內容過長時也能置中 */
+  overflow-y: auto;
+}
+.modal-content {
+  background: #fff;
+  border-radius: 1.2em;
+  max-width: 600px;
+  width: 95vw;
+  padding: 2.2em 2em 1.5em 2em;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  position: relative;
+  animation: fadeInUp 0.4s;
+  /* Modal內容高度限制，超出時可捲動 */
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.2em;
+}
+.modal-title {
+  font-size: 1.1em; font-weight: 700; color: #ff5b2e;
+}
+.modal-close {
+  background: none; border: none; font-size: 1.5em; color: #888; cursor: pointer; transition: color 0.18s;
+}
+.modal-close:hover { color: #ff5b2e; }
+.modal-body {
+  color: #232323; font-size: 0.95em; line-height: 1.7;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  max-height: 60vh;
+  padding-right: 0.3em;
+}
+body.modal-open { overflow: hidden; }
+@media (max-width:600px) {
+  .modal-content { padding: 1.2em 0.6em; }
+  .modal-body { max-height: 48vh; }
+}
+
+  </style>
+  <div id="mdModal" class="modal-backdrop" style="display:none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-title">作品詳情</span>
+        <button class="modal-close" id="modal-close" title="關閉">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <!-- 內容由 JS 動態產生 -->
+      </div>
+    </div>
+  </div>
+  <script src="./js/i18n.js?v=1.0.3"></script>
+</body>
+</html>

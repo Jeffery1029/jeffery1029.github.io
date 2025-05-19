@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="關於我 - 個人資訊網站">
+  <meta property="og:title" content="關於我">
+  <meta property="og:description" content="詳細介紹個人背景、學歷、專長與照片。">
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/common.css">
+  <title>關於我 | 個人資訊網站</title>
+  <style>
+    .sidebar ul li a { font-size: 14px; }
+    .avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #eee;
+    }
+  </style>
+</head>
+<body>
+  <button id="lang-toggle" class="lang-float-btn"><i class="fa-solid fa-language"></i> <span>EN</span></button>
+  <nav class="sidebar">
+    <div class="nav-logo">
+      <img src="../public/images/Jeffery2.jpg" alt="Jeffery HU" class="avatar">
+      <span>Jeffery HU</span>
+    </div>
+    <ul>
+      <li><a href="index.html"><i class="fa-solid fa-house"></i> <span>首頁</span></a></li>
+      <li><a href="about.html" class="active"><i class="fa-solid fa-user"></i> <span>關於我</span></a></li>
+      <li><a href="experience.html"><i class="fa-solid fa-briefcase"></i> <span>經歷</span></a></li>
+      <li><a href="portfolio.html"><i class="fa-solid fa-image"></i> <span>作品集</span></a></li>
+      <li><a href="skills.html"><i class="fa-solid fa-lightbulb"></i> <span>技能</span></a></li>
+      <li><a href="contact.html"><i class="fa-solid fa-envelope"></i> <span>聯絡我</span></a></li>
+      <li><a href="resume.html"><i class="fa-solid fa-file-arrow-down"></i> <span>下載履歷</span></a></li>
+    </ul>
+  </nav>
+  <section class="about-section">
+  <div class="about-card">
+    <div class="about-avatar">
+      <img src="../public/images/Jeffery2.jpg" alt="Jeffery HU">
+    </div>
+    <div class="about-info">
+      <h1 class="about-name"><span id="about-name">胡國瑞</span> <span id="about-name-en">(Jeffery Hu)</span></h1>
+      <div class="about-tags">
+        <span class="tag" id="about-tag-1">網站開發</span>
+        <span class="tag" id="about-tag-2">程式設計</span>
+        <span class="tag" id="about-tag-3">APP開發</span>
+        <span class="tag tag-ai" id="about-tag-4">AI 愛好者</span>
+      </div>
+      <div class="about-edu-list">
+  <div class="edu-card">
+    <i class="fa-solid fa-graduation-cap"></i>
+    <div>
+      <div class="edu-school" id="edu-school-1">大葉大學</div>
+      <div class="edu-degree" id="edu-degree-1">資訊管理所碩士</div>
+    </div>
+  </div>
+  <div class="edu-card">
+    <i class="fa-solid fa-graduation-cap"></i>
+    <div>
+      <div class="edu-school" id="edu-school-2">輔仁大學</div>
+      <div class="edu-degree" id="edu-degree-2">企業管理學系學士</div>
+    </div>
+  </div>
+  <div class="edu-card">
+    <i class="fa-solid fa-school"></i>
+    <div>
+      <div class="edu-school" id="edu-school-3">桃園高級中學</div>
+    </div>
+  </div>
+</div>
+<style>
+.about-edu-list {
+  display: flex;
+  gap: 1.1em;
+  margin-bottom: 1.1em;
+  flex-wrap: wrap;
+}
+.edu-card {
+  background: #f9f9fb;
+  border-radius: 1em;
+  box-shadow: 0 2px 10px 0 rgba(255,91,46,0.07);
+  padding: 0.8em 1.2em 0.8em 1em;
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  min-width: 155px;
+  max-width: 220px;
+  flex: 1 1 155px;
+}
+.edu-card i {
+  color: var(--main-color, #ff5b2e);
+  font-size: 1.1em;
+  margin-right: 0.3em;
+  opacity: 0.92;
+}
+.edu-school {
+  font-weight: 600;
+  font-size: 1.06em;
+  color: #333;
+}
+.edu-degree {
+  font-size: 0.96em;
+  color: #666;
+  margin-top: 2px;
+}
+@media (max-width: 700px) {
+  .about-edu-list {
+    flex-direction: column;
+    gap: 0.7em;
+  }
+  .edu-card {
+    max-width: 100%;
+    min-width: 0;
+  }
+}
+</style>
+      <div class="about-desc">
+  <p id="about-desc">
+    嗨！我是 Jeffery，熱愛新技術、專注於網站與應用程式開發，喜歡用程式改變生活。<br>
+    擅長團隊合作，也樂於分享與持續學習。AI、創新、設計思維都是我的熱情所在，平時喜歡參與社群、挑戰新領域，並將創意實踐於專案之中。<br>
+    歡迎有志同道合的朋友一起交流合作，讓科技帶來更多美好可能！
+  </p>
+</div>
+    </div>
+  </div>
+</section>
+<!-- modern card style -->
+<style>
+.about-section {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 70vh;
+  background: none;
+  margin-top: 2.5rem;
+}
+.about-card {
+  display: flex;
+  flex-direction: row;
+  gap: 2.5rem;
+  background: #fff;
+  border-radius: 2rem;
+  box-shadow: 0 4px 32px 0 rgba(255,91,46,0.08), 0 1.5px 8px 0 rgba(0,0,0,0.08);
+  padding: 2.5rem 2.8rem 2.5rem 2.2rem;
+  max-width: 700px;
+  width: 100%;
+  align-items: center;
+  animation: fadeInUp 0.7s cubic-bezier(.23,1.01,.32,1) 0.1s both;
+}
+.about-avatar img {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--main-color, #ff5b2e);
+  box-shadow: 0 0 0 4px #fff;
+  background: #eee;
+}
+.about-info {
+  flex: 1;
+  min-width: 210px;
+}
+.about-name {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5em;
+  color: var(--main-color, #ff5b2e);
+  letter-spacing: 1px;
+}
+.about-name span {
+  font-size: 1.1rem;
+  color: #444;
+  font-weight: 400;
+}
+.about-tags {
+  margin-bottom: 1em;
+}
+.tag {
+  display: inline-block;
+  background: var(--main-color, #ff5b2e);
+  color: #fff;
+  font-size: 0.92em;
+  padding: 0.28em 0.9em;
+  border-radius: 1em;
+  margin-right: 0.45em;
+  margin-bottom: 0.3em;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px 0 rgba(255,91,46,0.07);
+  transition: background 0.18s;
+}
+.tag-ai {
+  background: #3b82f6;
+}
+.about-edu {
+  font-size: 1.04em;
+  color: #555;
+  margin-bottom: 1.1em;
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+}
+.about-edu i {
+  color: var(--main-color, #ff5b2e);
+  font-size: 1.13em;
+  opacity: 0.9;
+}
+.about-desc {
+  font-size: 1.08em;
+  color: #333;
+  line-height: 1.8;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+}
+@media (max-width: 700px) {
+  .about-card {
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1.1rem;
+    gap: 1.2rem;
+  }
+  .about-section {
+    margin-top: 1.5rem;
+  }
+}
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+</style>
+  <!-- 語言切換按鈕樣式已移至 common.css -->
+  <footer>
+    <p>&copy; 2025 Jeffery HU x AI x LIFE</p>
+  </footer>
+  <script src="./js/i18n.js?v=1.0.3"></script>
+</body>
+</html>

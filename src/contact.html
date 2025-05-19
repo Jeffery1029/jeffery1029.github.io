@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="聯絡我 - 個人資訊網站">
+  <meta property="og:title" content="聯絡我">
+  <meta property="og:description" content="聯絡表單、Email、LinkedIn、GitHub、社群連結。">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/common.css">
+  <title>聯絡我 | 個人資訊網站</title>
+  <style>
+    .sidebar ul li a { font-size: 14px; }
+    .avatar {
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+  <button id="lang-toggle" class="lang-float-btn"><i class="fa-solid fa-language"></i> <span>EN</span></button>
+  <nav class="sidebar">
+    <div class="nav-logo">
+      <img src="../public/images/Jeffery2.jpg" alt="Jeffery HU" class="avatar">
+      <span>Jeffery HU</span>
+    </div>
+    <ul>
+      <li><a href="index.html"><i class="fa-solid fa-house"></i> <span>首頁</span></a></li>
+      <li><a href="about.html"><i class="fa-solid fa-user"></i> <span>關於我</span></a></li>
+      <li><a href="experience.html"><i class="fa-solid fa-briefcase"></i> <span>經歷</span></a></li>
+      <li><a href="portfolio.html"><i class="fa-solid fa-image"></i> <span>作品集</span></a></li>
+      <li><a href="skills.html"><i class="fa-solid fa-lightbulb"></i> <span>技能</span></a></li>
+      <li><a href="contact.html" class="active"><i class="fa-solid fa-envelope"></i> <span>聯絡我</span></a></li>
+      <li><a href="resume.html"><i class="fa-solid fa-file-arrow-down"></i> <span>下載履歷</span></a></li>
+    </ul>
+  </nav>
+  <section class="contact-section">
+  <div class="contact-card">
+    <div class="contact-header">
+      <i class="fa-solid fa-envelope"></i>
+      <h1 id="contact-title">聯絡我</h1>
+    </div>
+    <form id="contact-form" action="#" method="post" class="contact-form">
+  <div class="form-row">
+    <label for="name" id="contact-name-label"><i class="fa-solid fa-user"></i> 姓名</label>
+    <input type="text" id="name" name="name" required>
+  </div>
+  <div class="form-row">
+    <label for="email" id="contact-email-label"><i class="fa-solid fa-at"></i> Email</label>
+    <input type="email" id="email" name="email" required>
+  </div>
+  <div class="form-row">
+    <label for="message" id="contact-message-label"><i class="fa-solid fa-message"></i> 訊息</label>
+    <textarea id="message" name="message" required></textarea>
+  </div>
+  <button type="submit" id="contact-submit-btn"><i class="fa-solid fa-paper-plane"></i> 送出</button>
+</form>
+<style>
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1em;
+}
+.form-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1em;
+  width: 100%;
+}
+.form-row label {
+  min-width: 200px;
+  width: 200px;
+  font-size: 1em;
+  color: #444;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  white-space: nowrap;
+  margin-bottom: 0;
+  padding-top: 0.3em;
+}
+.form-row input, .form-row textarea {
+  flex: 1 1 0%;
+  border-radius: 0.7em;
+  border: 1px solid #e0e0e0;
+  padding: 0.5em 1em;
+  font-size: 1em;
+  width: 100%;
+  margin-top: 0;
+  background: #fafafc;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+.form-row textarea { min-height: 70px; resize: vertical; }
+.form-row input:focus, .form-row textarea:focus { border-color: #ff5b2e; outline: none; }
+@media (max-width: 700px) {
+  .form-row { flex-direction: column; gap: 0.3em; }
+  .form-row label { width: 100%; min-width: 0; padding-top: 0; }
+}
+</style>
+    <div class="contact-social">
+      <p id="contact-social-text">也歡迎透過社群平台聯絡：</p>
+      <div class="social-links">
+        <a href="https://www.facebook.com/jefferyhu1029/" target="_blank" title="Facebook"><i class="fa-brands fa-facebook"></i> FB</a>
+        <a href="https://www.instagram.com/jefferyhu/" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i> IG</a>
+        <a href="https://www.linkedin.com/in/jeffery-h-9249b89b/" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+        <a href="https://x.com/jefferyhu1029" target="_blank" title="X"><i class="fa-brands fa-x-twitter"></i> X</a>
+        <a href="https://www.threads.com/@jefferyhu" target="_blank" title="Threads"><i class="fa-brands fa-threads"></i> Threads</a>
+      </div>
+    </div>
+  </div>
+</section>
+<script src="js/i18n.js"></script>
+<script>
+  window.addEventListener('DOMContentLoaded', function() {
+    if (window.i18n && typeof window.i18n.apply === 'function') {
+      window.i18n.apply();
+    }
+    document.getElementById('lang-toggle').onclick = function() {
+      window.i18n.toggle();
+    };
+  });
+</script>
+<style>
+.contact-section {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 70vh;
+  background: none;
+  margin-top: 2.5rem;
+}
+.contact-card {
+  background: #fff;
+  border-radius: 2rem;
+  box-shadow: 0 4px 32px 0 rgba(255,91,46,0.08), 0 1.5px 8px 0 rgba(0,0,0,0.08);
+  padding: 2.5rem 2.8rem 2.5rem 2.2rem;
+  max-width: 600px;
+  width: 100%;
+  animation: fadeInUp 0.7s cubic-bezier(.23,1.01,.32,1) 0.1s both;
+}
+.contact-header {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  margin-bottom: 1.1em;
+}
+.contact-header i {
+  color: var(--main-color, #ff5b2e);
+  font-size: 1.5em;
+  opacity: 0.92;
+}
+.contact-header h1 {
+  font-size: 1.28em;
+  font-weight: 700;
+  color: var(--main-color, #ff5b2e);
+  margin: 0;
+}
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1em;
+}
+.contact-form label {
+  font-size: 1em;
+  color: #444;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  min-width: 7.5em;
+  width: 10em;
+  white-space: nowrap;
+  margin-bottom: 0.2em;
+}
+.contact-form input, .contact-form textarea {
+  flex: 1 1 0%;
+  margin-left: 0.5em;
+  border-radius: 0.7em;
+  border: 1px solid #e0e0e0;
+  padding: 0.5em 1em;
+  font-size: 1em;
+  width: 100%;
+  margin-top: 0.2em;
+  background: #fafafc;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+.contact-form textarea { min-height: 70px; resize: vertical; }
+.contact-form input:focus, .contact-form textarea:focus { border-color: #ff5b2e; outline: none; }
+.contact-form button {
+  background: var(--main-color, #ff5b2e);
+  color: #fff;
+  border: none;
+  border-radius: 1.1em;
+  padding: 0.7em 1.5em;
+  font-size: 1.07em;
+  font-weight: 700;
+  cursor: pointer;
+  align-self: flex-end;
+  box-shadow: 0 2px 10px 0 rgba(255,91,46,0.07);
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  transition: background 0.2s;
+}
+.contact-form button:hover { background: #ff7e3c; }
+.contact-social {
+  margin-top: 2.2em;
+  text-align: center;
+}
+.social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  justify-content: center;
+  margin-top: 0.7em;
+}
+.social-links a {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+  background: #f9f9fb;
+  border-radius: 1.1em;
+  box-shadow: 0 2px 10px 0 rgba(255,91,46,0.07);
+  padding: 0.5em 1.1em;
+  font-size: 1em;
+  color: #333;
+  text-decoration: none;
+  transition: background 0.18s, color 0.18s;
+}
+.social-links a:hover {
+  background: #ff5b2e;
+  color: #fff;
+}
+@media (max-width: 700px) {
+  .contact-card {
+    padding: 1.2rem 0.6rem 1rem 0.6rem;
+    max-width: 100%;
+  }
+}
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+</style>
+  <footer>
+    <p>&copy; 2025 Jeffery HU x AI x LIFE</p>
+  </footer>
+  <script>
+    // 表單驗證（前端）
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('感謝您的聯絡！(此表單可串接 Supabase 或第三方服務)');
+      this.reset();
+    });
+  </script>
+
+  <!-- 語言切換按鈕樣式已移至 common.css -->
+  <script src="./js/i18n.js?v=1.0.3"></script>
+</body>
+</html>
