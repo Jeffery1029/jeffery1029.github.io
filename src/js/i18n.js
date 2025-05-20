@@ -96,12 +96,7 @@ window.i18n = {
     // 應用新語言
     this.apply();
     
-    // 確保所有翻譯都已完成
-    setTimeout(() => {
-      // 強制重新加載頁面以確保所有內容都更新
-      console.log('重新加載頁面以應用語言變更...');
-      window.location.reload();
-    }, 50);
+    console.log('語言切換完成，無需重新載入頁面');
   },
   
   // 更新語言切換按鈕文字
@@ -351,6 +346,8 @@ window.i18n = {
         'soft-tag-5': '創意思考',
         'soft-tag-6': '持續學習',
         'soft-tag-7': '熱情主動',
+        // portfolio.html
+        'portfolio-title': '作品集',
         // Contact.html
         'contact-title': '聯絡我',
         'contact-name-label': '姓名',
@@ -469,8 +466,10 @@ window.i18n = {
         'soft-tag-4': 'Client Communication',
         'soft-tag-5': 'Creative Thinking',
         'soft-tag-6': 'Continuous Learning',
-        'soft-tag-7': 'Passionate & Proactive',
+        'soft-tag-7': 'Passionate Initiative',
         'skill-desc': 'I am a professional website/programmer/APP developer passionate about new technologies and AI.',
+        // portfolio.html
+        'portfolio-title': 'Portfolio',
         // Contact.html
         'contact-title': 'Contact Me',
         'contact-name-label': 'Name',

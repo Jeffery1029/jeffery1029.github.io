@@ -45,6 +45,31 @@
       box-shadow: 0 0 12px 3px rgba(255, 105, 0, 0.3);
     }
 
+    /* 語言切換按鈕 */
+    .lang-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .lang-toggle:hover {
+      background: rgba(0, 0, 0, 0.9);
+      transform: scale(1.05);
+    }
+
     @keyframes float {
       0% {
         transform: translateY(100vh) translateX(0) rotate(0deg);
@@ -64,7 +89,6 @@
     .avatar {
       border-radius: 50%;
     }
-    /* 語言切換按鈕樣式已移至 common.css */
   </style>
 </head>
 <body>
@@ -87,23 +111,18 @@
     <!-- 動態生成的粒子 -->
   </div>
   
+  <!-- 語言切換按鈕 -->
+  <button id="lang-toggle" class="lang-toggle">
+    <span>EN</span>
+  </button>
+  
   <section class="portfolio-section">
   <div class="portfolio-card">
     <div class="portfolio-header">
       <i class="fa-solid fa-image"></i>
-      <h1>作品集</h1>
+      <h1 id="portfolio-title">作品集</h1>
     </div>
-    <div class="portfolio-toolbar">
-      <label for="filter-category">分類：</label>
-      <select id="filter-category">
-        <option value="all">全部</option>
-        <option value="web">網站</option>
-        <option value="app">App</option>
-        <option value="design">設計</option>
-        <option value="research">研究</option>
-      </select>
-      <input type="text" id="search-input" placeholder="搜尋作品...">
-    </div>
+    <!-- 分類工具列已移除 -->
     <div class="works-list" id="portfolio-list">
       <!-- 作品卡片由 JS 動態產生 -->
     </div>
@@ -237,19 +256,34 @@
     // 作品篩選與搜尋功能
     function renderPortfolio() {
       const list = document.getElementById('portfolio-list');
-      const category = document.getElementById('filter-category').value;
-      const keyword = document.getElementById('search-input').value.trim();
       list.innerHTML = '';
-      window.worksData.filter(work => {
-        const matchCat = category === 'all' || (work.category === category);
-        const matchKey = !keyword || work.title.includes(keyword) || work.desc.includes(keyword);
-        return matchCat && matchKey;
-      }).forEach(work => {
+      
+      // 取得目前語言
+      const currentLang = window.i18n ? window.i18n.lang : 'zh';
+      
+      window.worksData.forEach(work => {
         const card = document.createElement('div');
         card.className = 'work-card';
-        card.innerHTML = `<h3>${work.title}</h3><p>${work.desc}</p><a href="#" class="detail-btn" data-id="${work.id}">詳情</a>`;
+        
+        // 根據語言取得標題和描述
+        let title = work.title;
+        let desc = work.desc;
+        let detailText = currentLang === 'zh' ? '詳情' : 'Details';
+        
+        // 如果有翻譯對應表，則使用翻譯後的文字
+        if (window.i18n && window.i18n.translations) {
+          const translations = window.i18n.translations();
+          if (translations && translations[currentLang] && translations[currentLang].works && translations[currentLang].works[work.id]) {
+            const translatedWork = translations[currentLang].works[work.id];
+            title = translatedWork.title || title;
+            desc = translatedWork.desc || desc;
+          }
+        }
+        
+        card.innerHTML = `<h3>${title}</h3><p>${desc}</p><a href="#" class="detail-btn" data-id="${work.id}">${detailText}</a>`;
         list.appendChild(card);
       });
+      
       // 詳情按鈕事件
       document.querySelectorAll('.detail-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
@@ -258,6 +292,11 @@
         });
       });
     }
+    
+    // 監聽語言變更事件，重新渲染作品集
+    document.addEventListener('languageChanged', function(e) {
+      renderPortfolio();
+    });
     // 顯示 Modal 並載入 Markdown
     function showModal(id) {
       // 目前僅對 p1 (作品A) 顯示 Markdown
@@ -283,17 +322,7 @@
       document.getElementById('mdModal').style.display = 'none';
       document.body.classList.remove('modal-open');
     }
-    // Modal 關閉按鈕與遮罩
-    window.addEventListener('DOMContentLoaded', function() {
-      renderPortfolio();
-      document.getElementById('modal-close').addEventListener('click', closeModal);
-      document.getElementById('mdModal').addEventListener('click', function(e) {
-        if (e.target === this) closeModal();
-      });
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeModal();
-      });
-    });
+    // 注意：初始化代碼已移至 DOMContentLoaded 事件中
   </script>
   <!-- Bootstrap Modal 樣式與結構 -->
   <style>
@@ -354,7 +383,7 @@ body.modal-open { overflow: hidden; }
       </div>
     </div>
   </div>
-  <script src="./js/i18n.js?v=1.0.3"></script>
+  <script src="./js/i18n.js"></script>
   <script>
     // 動畫背景粒子效果
     const particles = [];
@@ -382,11 +411,30 @@ body.modal-open { overflow: hidden; }
       return particle;
     }
 
-    for (let i = 0; i < numParticles; i++) {
-      const particle = createParticle();
-      document.querySelector('.background-animation').appendChild(particle);
-      particles.push(particle);
-    }
+    // 頁面載入後初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      // 創建粒子動畫
+      for (let i = 0; i < numParticles; i++) {
+        const particle = createParticle();
+        document.querySelector('.background-animation').appendChild(particle);
+        particles.push(particle);
+      }
+      
+      // 初始化多語言系統
+      window.i18n.init();
+      
+      // 渲染作品集
+      renderPortfolio();
+      
+      // Modal 關閉按鈕與遮罩
+      document.getElementById('modal-close').addEventListener('click', closeModal);
+      document.getElementById('mdModal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeModal();
+      });
+    });
   </script>
 </body>
 </html>

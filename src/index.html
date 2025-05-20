@@ -124,6 +124,31 @@
       background: rgba(255, 255, 255, 0.1);
     }
 
+    /* 語言切換按鈕 */
+    .lang-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .lang-toggle:hover {
+      background: rgba(0, 0, 0, 0.9);
+      transform: scale(1.05);
+    }
+
     /* 歡迎訊息樣式 */
     .welcome-message {
       position: absolute;
@@ -195,11 +220,18 @@
     <!-- 動態生成的粒子 -->
   </div>
 
+  <!-- 語言切換按鈕 -->
+  <button id="lang-toggle" class="lang-toggle">
+    <span>EN</span>
+  </button>
+
   <div class="welcome-message">
-    <h1>哈囉，我是 Jeffery</h1>
-    <p>一位專業的網站/程式/APP開發者，熱愛 AI技術以及創新與分享。</p>
+    <h1 id="intro-title">哈囉，我是 Jeffery</h1>
+    <p id="intro-desc">一位專業的網站/程式/APP開發者，熱愛 AI技術以及創新與分享。</p>
   </div>
 
+  <!-- 載入 i18n.js -->
+  <script src="js/i18n.js"></script>
   <script>
     // 動畫背景粒子效果
     const particles = [];
@@ -227,11 +259,18 @@
       return particle;
     }
 
-    for (let i = 0; i < numParticles; i++) {
-      const particle = createParticle();
-      document.querySelector('.background-animation').appendChild(particle);
-      particles.push(particle);
-    }
+    // 頁面載入後初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      // 創建粒子動畫
+      for (let i = 0; i < numParticles; i++) {
+        const particle = createParticle();
+        document.querySelector('.background-animation').appendChild(particle);
+        particles.push(particle);
+      }
+      
+      // 初始化多語言系統
+      window.i18n.init();
+    });
   </script>
 </body>
 </html>
