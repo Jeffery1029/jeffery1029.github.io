@@ -1,0 +1,199 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #4a6baf;
+    --secondary-color: #6c5ce7;
+    --accent-color: #00cec9;
+    --text-color: #2d3436;
+    --light-color: #f5f6fa;
+    --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    --hover-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    --transition-speed: 0.3s;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--light-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+    position: relative;
+    display: inline-block;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+    border-radius: 2px;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: #636e72;
+}
+
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.game-card {
+    background-color: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.game-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--hover-shadow);
+}
+
+.game-icon {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 30px;
+    text-align: center;
+    font-size: 3rem;
+}
+
+.game-info {
+    padding: 25px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.game-info h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.game-info p {
+    margin-bottom: 20px;
+    color: #636e72;
+    flex-grow: 1;
+}
+
+.play-button {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+    box-shadow: 0 5px 15px rgba(74, 107, 175, 0.3);
+}
+
+.play-button:hover {
+    background-color: var(--secondary-color);
+    transform: scale(1.05);
+}
+
+footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #dfe6e9;
+    color: #636e72;
+}
+
+/* 遊戲特定樣式 */
+.game-card[data-game="snake"] .game-icon {
+    background: linear-gradient(135deg, #4cd137, #44bd32);
+}
+
+.game-card[data-game="sudoku"] .game-icon {
+    background: linear-gradient(135deg, #273c75, #192a56);
+}
+
+.game-card[data-game="tetris"] .game-icon {
+    background: linear-gradient(135deg, #e84118, #c23616);
+}
+
+.game-card[data-game="breakout"] .game-icon {
+    background: linear-gradient(135deg, #00a8ff, #0097e6);
+}
+
+.game-card[data-game="memory"] .game-icon {
+    background: linear-gradient(135deg, #9c88ff, #8c7ae6);
+}
+
+.game-card[data-game="2048"] .game-icon {
+    background: linear-gradient(135deg, #fbc531, #e1b12c);
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .games-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+    
+    h1 {
+        font-size: 2.5rem;
+    }
+    
+    .game-icon {
+        padding: 20px;
+        font-size: 2.5rem;
+    }
+    
+    .game-info {
+        padding: 20px;
+    }
+    
+    .game-info h2 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 20px 15px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .games-grid {
+        grid-template-columns: 1fr;
+    }
+} 

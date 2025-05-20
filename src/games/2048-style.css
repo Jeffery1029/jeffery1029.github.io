@@ -1,0 +1,299 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #faf8ef;
+    color: #776e65;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 60px;
+    font-weight: bold;
+    color: #776e65;
+}
+
+.score-container {
+    display: flex;
+    gap: 10px;
+}
+
+.score-box {
+    position: relative;
+    background-color: #bbada0;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-align: center;
+    min-width: 80px;
+}
+
+.score-label {
+    color: #eee4da;
+    font-size: 14px;
+    display: block;
+}
+
+#score, #best-score {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.game-intro {
+    margin-bottom: 20px;
+}
+
+.game-intro p {
+    margin-bottom: 10px;
+}
+
+.controls {
+    margin-top: 10px;
+}
+
+button {
+    background-color: #8f7a66;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #9f8b77;
+}
+
+.game-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.game-message {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(238, 228, 218, 0.73);
+    z-index: 100;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 6px;
+}
+
+.game-message p {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.game-message.game-won {
+    background-color: rgba(237, 194, 46, 0.5);
+    color: #f9f6f2;
+}
+
+.game-message.game-over {
+    background-color: rgba(238, 228, 218, 0.73);
+}
+
+.grid-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 100%;
+    background-color: #bbada0;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.grid-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 10px;
+    padding: 10px;
+}
+
+.grid-cell {
+    background-color: rgba(238, 228, 218, 0.35);
+    border-radius: 3px;
+}
+
+.grid-tiles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.tile {
+    position: absolute;
+    width: calc(25% - 10px);
+    height: calc(25% - 10px);
+    border-radius: 3px;
+    font-weight: bold;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.1s, opacity 0.1s;
+}
+
+.tile-2 {
+    background-color: #eee4da;
+    color: #776e65;
+}
+
+.tile-4 {
+    background-color: #ede0c8;
+    color: #776e65;
+}
+
+.tile-8 {
+    background-color: #f2b179;
+    color: #f9f6f2;
+}
+
+.tile-16 {
+    background-color: #f59563;
+    color: #f9f6f2;
+}
+
+.tile-32 {
+    background-color: #f67c5f;
+    color: #f9f6f2;
+}
+
+.tile-64 {
+    background-color: #f65e3b;
+    color: #f9f6f2;
+}
+
+.tile-128 {
+    background-color: #edcf72;
+    color: #f9f6f2;
+    font-size: 28px;
+}
+
+.tile-256 {
+    background-color: #edcc61;
+    color: #f9f6f2;
+    font-size: 28px;
+}
+
+.tile-512 {
+    background-color: #edc850;
+    color: #f9f6f2;
+    font-size: 28px;
+}
+
+.tile-1024 {
+    background-color: #edc53f;
+    color: #f9f6f2;
+    font-size: 20px;
+}
+
+.tile-2048 {
+    background-color: #edc22e;
+    color: #f9f6f2;
+    font-size: 20px;
+}
+
+.tile-super {
+    background-color: #3c3a32;
+    color: #f9f6f2;
+    font-size: 16px;
+}
+
+.tile-new {
+    animation: appear 0.2s;
+}
+
+.tile-merged {
+    animation: pop 0.2s;
+}
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pop {
+    0% {
+        transform: scale(0.8);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.instructions {
+    margin-top: 20px;
+    text-align: center;
+    line-height: 1.5;
+}
+
+/* 響應式設計 */
+@media (max-width: 520px) {
+    h1 {
+        font-size: 40px;
+    }
+    
+    .score-box {
+        padding: 8px 10px;
+        min-width: 70px;
+    }
+    
+    .grid-background {
+        gap: 8px;
+        padding: 8px;
+    }
+    
+    .tile {
+        width: calc(25% - 8px);
+        height: calc(25% - 8px);
+    }
+    
+    .tile-128, .tile-256, .tile-512 {
+        font-size: 22px;
+    }
+    
+    .tile-1024, .tile-2048 {
+        font-size: 18px;
+    }
+} 

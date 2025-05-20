@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="遊戲間 - 個人資訊網站">
+  <meta property="og:title" content="遊戲間">
+  <meta property="og:description" content="放鬆心情，享受遊戲的樂趣。">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/common.css">
+  <title>遊戲間 | 個人資訊網站</title>
+  <style>
+    .sidebar ul li a { font-size: 14px; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #000;
+      color: #fff;
+    }
+
+    /* 動畫背景 */
+    .background-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      background: linear-gradient(135deg, #000428, #004e92);
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.4);
+      animation: float 15s infinite linear;
+    }
+
+    .particle:nth-child(even) {
+      background: rgba(255, 105, 0, 0.6);
+      box-shadow: 0 0 12px 3px rgba(255, 105, 0, 0.3);
+    }
+
+    /* 語言切換按鈕 */
+    .lang-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .lang-toggle:hover {
+      background: rgba(0, 0, 0, 0.9);
+      transform: scale(1.05);
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) translateX(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) translateX(100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* 遊戲間特定樣式 */
+    .games-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      margin-left: 220px;
+    }
+
+    .games-title {
+      color: #fff;
+      text-align: center;
+      margin-bottom: 2rem;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      width: 100%;
+    }
+
+    .game-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .game-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .game-icon {
+      background: linear-gradient(135deg, #ff5b2e, #ff8f6c);
+      height: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 3rem;
+      color: white;
+    }
+
+    .game-info {
+      padding: 1.5rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .game-info h2 {
+      color: #ff5b2e;
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+    }
+
+    .game-info p {
+      color: #ccc;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .play-button {
+      display: inline-block;
+      background: #ff5b2e;
+      color: white;
+      padding: 0.7rem 1.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s ease;
+      text-align: center;
+    }
+
+    .play-button:hover {
+      background: #ff7e3c;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .games-container {
+        margin-left: 0;
+        padding: 1rem;
+      }
+
+      .games-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="sidebar">
+    <div class="nav-logo">
+      <img src="../../public/images/Jeffery2.jpg" alt="Jeffery HU" class="avatar">
+      <span>Jeffery HU</span>
+    </div>
+    <ul>
+      <li><a href="../index.html"><i class="fa-solid fa-house"></i> <span>首頁</span></a></li>
+      <li><a href="../about.html"><i class="fa-solid fa-user"></i> <span>關於我</span></a></li>
+      <li><a href="../experience.html"><i class="fa-solid fa-briefcase"></i> <span>經歷</span></a></li>
+      <li><a href="../portfolio.html"><i class="fa-solid fa-image"></i> <span>作品集</span></a></li>
+      <li><a href="../skills.html"><i class="fa-solid fa-lightbulb"></i> <span>技能</span></a></li>
+      <li><a href="index.html" class="active"><i class="fa-solid fa-gamepad"></i> <span>遊戲間</span></a></li>
+      <li><a href="../contact.html"><i class="fa-solid fa-envelope"></i> <span>聯絡我</span></a></li>
+    </ul>
+  </nav>
+  
+  <div class="background-animation">
+    <!-- 動態生成的粒子 -->
+  </div>
+  
+  <!-- 語言切換按鈕 -->
+  <button id="lang-toggle" class="lang-toggle">
+    <span>EN</span>
+  </button>
+
+  <div class="games-container">
+    <div class="games-title">
+      <h1 id="games-heading">遊戲間</h1>
+      <p id="games-subtitle">放鬆心情，享受遊戲的樂趣</p>
+    </div>
+    
+    <div class="games-grid">
+      <div class="game-card" data-game="snake">
+        <div class="game-icon">
+          <i class="fas fa-wave-square"></i>
+        </div>
+        <div class="game-info">
+          <h2 id="game-snake-title">貪吃蛇</h2>
+          <p id="game-snake-desc">控制蛇吃食物並成長，但不要撞到自己！</p>
+          <a href="SnakeGame.html" class="play-button" id="game-snake-button">開始遊戲</a>
+        </div>
+      </div>
+      
+      <div class="game-card" data-game="sudoku">
+        <div class="game-icon">
+          <i class="fas fa-th"></i>
+        </div>
+        <div class="game-info">
+          <h2 id="game-sudoku-title">數獨</h2>
+          <p id="game-sudoku-desc">填充數字，訓練你的邏輯思維能力。</p>
+          <a href="sudoku.html" class="play-button" id="game-sudoku-button">開始遊戲</a>
+        </div>
+      </div>
+      
+      <div class="game-card" data-game="tetris">
+        <div class="game-icon">
+          <i class="fas fa-cubes"></i>
+        </div>
+        <div class="game-info">
+          <h2 id="game-tetris-title">俄羅斯方塊</h2>
+          <p id="game-tetris-desc">排列下落的方塊，消除完整的行。</p>
+          <a href="tetris.html" class="play-button" id="game-tetris-button">開始遊戲</a>
+        </div>
+      </div>
+      
+      <div class="game-card" data-game="breakout">
+        <div class="game-icon">
+          <i class="fas fa-table-tennis"></i>
+        </div>
+        <div class="game-info">
+          <h2 id="game-breakout-title">打磚塊</h2>
+          <p id="game-breakout-desc">控制擋板反彈球，打破所有磚塊。</p>
+          <a href="breakout.html" class="play-button" id="game-breakout-button">開始遊戲</a>
+        </div>
+      </div>
+      
+      <div class="game-card" data-game="memory">
+        <div class="game-icon">
+          <i class="fas fa-brain"></i>
+        </div>
+        <div class="game-info">
+          <h2 id="game-memory-title">記憶配對</h2>
+          <p id="game-memory-desc">翻開卡片，找出所有匹配的對子。</p>
+          <a href="MemoryCard.html" class="play-button" id="game-memory-button">開始遊戲</a>
+        </div>
+      </div>
+      
+      <div class="game-card" data-game="2048">
+        <div class="game-icon">
+          <i class="fas fa-calculator"></i>
+        </div>
+        <div class="game-info">
+          <h2 id="game-2048-title">2048</h2>
+          <p id="game-2048-desc">合併相同數字，嘗試達到 2048 方塊！</p>
+          <a href="2048.html" class="play-button" id="game-2048-button">開始遊戲</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Jeffery HU x AI x LIFE</p>
+  </footer>
+
+  <script src="../js/i18n.js"></script>
+  <script>
+    // 頁面載入後初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      // 創建粒子動畫
+      const particles = [];
+      const numParticles = 80;
+
+      function createParticle() {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        // 隨機位置
+        particle.style.left = Math.random() * 100 + 'vw';
+        particle.style.top = Math.random() * 100 + 'vh';
+        
+        // 隨機大小 - 更大的粒子
+        const size = Math.random() * 15 + 8;
+        particle.style.width = particle.style.height = size + 'px';
+        
+        // 隨機延遲
+        particle.style.animationDelay = Math.random() * 8 + 's';
+        
+        // 隨機動畫持續時間
+        const duration = Math.random() * 10 + 10;
+        particle.style.animationDuration = duration + 's';
+        
+        return particle;
+      }
+
+      for (let i = 0; i < numParticles; i++) {
+        const particle = createParticle();
+        document.querySelector('.background-animation').appendChild(particle);
+        particles.push(particle);
+      }
+      
+      // 初始化多語言系統
+      window.i18n.init();
+    });
+  </script>
+</body>
+</html>

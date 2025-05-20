@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="貪吃蛇遊戲 - 個人資訊網站">
+  <meta property="og:title" content="貪吃蛇遊戲">
+  <meta property="og:description" content="控制蛇吃食物並成長，但不要撞到自己！">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/common.css">
+  <title id="page-title">貪吃蛇遊戲 | 個人資訊網站</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #000;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* 動畫背景 */
+    .background-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      background: linear-gradient(135deg, #000428, #004e92);
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.4);
+      animation: float 15s infinite linear;
+    }
+
+    .particle:nth-child(even) {
+      background: rgba(255, 105, 0, 0.6);
+      box-shadow: 0 0 12px 3px rgba(255, 105, 0, 0.3);
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) translateX(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) translateX(100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* 導航欄樣式 */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-logo img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .nav-logo span {
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar ul li {
+      margin: 5px 0;
+    }
+
+    .sidebar ul li a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      font-size: 14px;
+    }
+
+    .sidebar ul li a:hover,
+    .sidebar ul li a.active {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* 遊戲容器樣式 */
+    .game-content {
+      margin-left: 250px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .game-title {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    #game-container {
+      position: relative;
+      margin: 20px 0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    #game-canvas {
+      display: block;
+      background-color: #fff;
+      border: none;
+      border-radius: 10px;
+    }
+
+    #score-display {
+      margin-top: 15px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .game-instructions {
+      margin-top: 20px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      text-align: center;
+      backdrop-filter: blur(5px);
+      max-width: 400px;
+    }
+
+    #game-over {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.85);
+      color: white;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      display: none;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      min-width: 250px;
+    }
+
+    #game-over h2 {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      color: #ff5b2e;
+    }
+
+    #final-score {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+    }
+
+    #restart-button {
+      padding: 10px 20px;
+      background-color: #ff5b2e;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(255, 91, 46, 0.3);
+    }
+
+    #restart-button:hover {
+      background-color: #ff7e3c;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(255, 91, 46, 0.4);
+    }
+
+    /* 語言切換按鈕 */
+    .lang-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .lang-toggle:hover {
+      background: rgba(0, 0, 0, 0.9);
+      transform: scale(1.05);
+    }
+    
+    /* 響應式設計 */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 200px;
+      }
+
+      .game-content {
+        margin-left: 200px;
+        padding: 20px;
+      }
+
+      .nav-logo img {
+        width: 50px;
+        height: 50px;
+      }
+
+      .nav-logo span {
+        font-size: 1rem;
+      }
+
+      .game-title {
+        font-size: 2rem;
+      }
+
+      #game-canvas {
+        width: 300px;
+        height: 300px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 10px;
+      }
+
+      .game-content {
+        margin-left: 0;
+        padding: 15px;
+      }
+
+      .nav-logo {
+        justify-content: center;
+      }
+
+      .sidebar ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .sidebar ul li {
+        margin: 5px;
+      }
+
+      #game-canvas {
+        width: 280px;
+        height: 280px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="sidebar">
+    <div class="nav-logo">
+      <img src="../../public/images/Jeffery2.jpg" alt="Jeffery HU" class="avatar">
+      <span>Jeffery HU</span>
+    </div>
+    <ul>
+      <li><a href="../index.html"><i class="fa-solid fa-house"></i> <span id="nav-home">首頁</span></a></li>
+      <li><a href="../about.html"><i class="fa-solid fa-user"></i> <span id="nav-about">關於我</span></a></li>
+      <li><a href="../experience.html"><i class="fa-solid fa-briefcase"></i> <span id="nav-experience">經歷</span></a></li>
+      <li><a href="../portfolio.html"><i class="fa-solid fa-image"></i> <span id="nav-portfolio">作品集</span></a></li>
+      <li><a href="../skills.html"><i class="fa-solid fa-lightbulb"></i> <span id="nav-skills">技能</span></a></li>
+      <li><a href="index.html" class="active"><i class="fa-solid fa-gamepad"></i> <span id="nav-games">遊戲間</span></a></li>
+      <li><a href="../contact.html"><i class="fa-solid fa-envelope"></i> <span id="nav-contact">聯絡我</span></a></li>
+    </ul>
+  </nav>
+  
+  <div class="background-animation">
+    <!-- 動態生成的粒子 -->
+  </div>
+
+  <!-- 語言切換按鈕 -->
+  <button id="lang-toggle" class="lang-toggle">
+    <span>EN</span>
+  </button>
+
+  <div class="game-content">
+    <h1 class="game-title" id="game-title">貪吃蛇遊戲</h1>
+    <div id="game-container">
+      <canvas id="game-canvas" width="400" height="400"></canvas>
+      <div id="game-over">
+        <h2 id="game-over-text">遊戲結束！</h2>
+        <p id="final-score">得分：<span id="final-score-value">0</span></p>
+        <button id="restart-button">重新開始</button>
+      </div>
+    </div>
+    <div id="score-display">得分：<span id="current-score">0</span></div>
+    <div class="game-instructions">
+      <p id="game-instructions-text">使用方向鍵 ↑ ↓ ← → 或 W A S D 控制蛇的移動</p>
+    </div>
+  </div>
+
+  <!-- 載入 i18n.js -->
+  <script src="../js/i18n.js"></script>
+  
+  <script>
+    // 動畫背景粒子效果
+    const particles = [];
+    const numParticles = 80;
+
+    function createParticle() {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      
+      // 隨機位置
+      particle.style.left = Math.random() * 100 + 'vw';
+      particle.style.top = Math.random() * 100 + 'vh';
+      
+      // 隨機大小 - 更大的粒子
+      const size = Math.random() * 15 + 8;
+      particle.style.width = particle.style.height = size + 'px';
+      
+      // 隨機延遲
+      particle.style.animationDelay = Math.random() * 8 + 's';
+      
+      // 隨機動畫持續時間
+      const duration = Math.random() * 10 + 10;
+      particle.style.animationDuration = duration + 's';
+      
+      return particle;
+    }
+
+    // 頁面載入後初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      // 創建粒子動畫
+      for (let i = 0; i < numParticles; i++) {
+        const particle = createParticle();
+        document.querySelector('.background-animation').appendChild(particle);
+        particles.push(particle);
+      }
+      
+      // 初始化多語言系統
+      window.i18n.init();
+      
+      // 定義蛇遊戲特定的翻譯
+      const gameTranslations = {
+        zh: {
+          // 遊戲文本
+          'game-title': '貪吃蛇遊戲',
+          'game-over-text': '遊戲結束！',
+          'restart-button': '重新開始',
+          'score-prefix': '得分：',
+          'game-instructions-text': '使用方向鍵 ↑ ↓ ← → 或 W A S D 控制蛇的移動',
+          
+          // 導航列項目
+          'nav-home': '首頁',
+          'nav-about': '關於我',
+          'nav-experience': '經歷',
+          'nav-portfolio': '作品集',
+          'nav-skills': '技能',
+          'nav-games': '遊戲間',
+          'nav-contact': '聯絡我'
+        },
+        en: {
+          // 遊戲文本
+          'game-title': 'Snake Game',
+          'game-over-text': 'Game Over!',
+          'restart-button': 'Restart',
+          'score-prefix': 'Score: ',
+          'game-instructions-text': 'Use arrow keys ↑ ↓ ← → or W A S D to control the snake',
+          
+          // 導航列項目
+          'nav-home': 'Home',
+          'nav-about': 'About',
+          'nav-experience': 'Experience',
+          'nav-portfolio': 'Portfolio',
+          'nav-skills': 'Skills',
+          'nav-games': 'Game Room',
+          'nav-contact': 'Contact'
+        }
+      };
+      
+      // 更新遊戲界面的文本
+      function updateGameText() {
+        const lang = window.i18n.lang;
+        const translations = gameTranslations[lang];
+        
+        // 更新遊戲文本
+        document.getElementById('game-title').textContent = translations['game-title'];
+        document.getElementById('game-over-text').textContent = translations['game-over-text'];
+        document.getElementById('restart-button').textContent = translations['restart-button'];
+        document.getElementById('game-instructions-text').textContent = translations['game-instructions-text'];
+        
+        // 更新得分顯示
+        const scorePrefix = translations['score-prefix'];
+        const currentScore = document.getElementById('current-score').textContent;
+        document.getElementById('score-display').innerHTML = scorePrefix + '<span id="current-score">' + currentScore + '</span>';
+        
+        const finalScore = document.getElementById('final-score-value').textContent;
+        document.getElementById('final-score').innerHTML = scorePrefix + '<span id="final-score-value">' + finalScore + '</span>';
+        
+        // 更新導航列項目
+        document.getElementById('nav-home').textContent = translations['nav-home'];
+        document.getElementById('nav-about').textContent = translations['nav-about'];
+        document.getElementById('nav-experience').textContent = translations['nav-experience'];
+        document.getElementById('nav-portfolio').textContent = translations['nav-portfolio'];
+        document.getElementById('nav-skills').textContent = translations['nav-skills'];
+        document.getElementById('nav-games').textContent = translations['nav-games'];
+        document.getElementById('nav-contact').textContent = translations['nav-contact'];
+      }
+      
+      // 創建一個新的語言切換按鈕函數
+      function setupLangToggle() {
+        const langBtn = document.getElementById('lang-toggle');
+        if (!langBtn) return;
+        
+        // 移除所有可能存在的事件監聽器
+        const newButton = langBtn.cloneNode(true);
+        langBtn.parentNode.replaceChild(newButton, langBtn);
+        
+        // 為新按鈕添加事件處理
+        newButton.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          console.log('語言切換按鈕被點擊，當前語言:', window.i18n.lang);
+          
+          // 切換語言
+          window.i18n.lang = window.i18n.lang === 'zh' ? 'en' : 'zh';
+          
+          // 保存偏好設定
+          localStorage.setItem('preferred-language', window.i18n.lang);
+          
+          // 更新按鈕文字
+          const langText = newButton.querySelector('span');
+          if (langText) {
+            langText.textContent = window.i18n.lang === 'zh' ? 'EN' : '繁';
+            console.log('設置按鈕文字為:', langText.textContent);
+          }
+          
+          // 更新遊戲文本
+          updateGameText();
+          return false;
+        });
+        
+        // 設置正確的按鈕文字
+        const langText = newButton.querySelector('span');
+        if (langText) {
+          const buttonText = window.i18n.lang === 'zh' ? 'EN' : '繁';
+          langText.textContent = buttonText;
+          console.log('初始設置按鈕文字為:', buttonText);
+        }
+      }
+      
+      // 初始化語言切換按鈕
+      setupLangToggle();
+      
+      // 初始更新文本
+      updateGameText();
+    });
+  </script>
+
+  <script src="snake-game.js"></script>
+</body>
+</html>

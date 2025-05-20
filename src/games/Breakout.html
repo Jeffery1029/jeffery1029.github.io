@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="打磚塊遊戲 - 個人資訊網站">
+  <meta property="og:title" content="打磚塊遊戲">
+  <meta property="og:description" content="經典的打磚塊遊戲，測試你的反應和準確度。">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="breakout-style.css">
+  <title id="page-title">打磚塊遊戲 | 個人資訊網站</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #000;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* 動畫背景 */
+    .background-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      background: linear-gradient(135deg, #000428, #004e92);
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.4);
+      animation: float 15s infinite linear;
+    }
+
+    .particle:nth-child(even) {
+      background: rgba(255, 105, 0, 0.6);
+      box-shadow: 0 0 12px 3px rgba(255, 105, 0, 0.3);
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) translateX(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) translateX(100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* 導航欄樣式 */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-logo img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .nav-logo span {
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar ul li {
+      margin: 5px 0;
+    }
+
+    .sidebar ul li a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      font-size: 14px;
+    }
+
+    .sidebar ul li a:hover,
+    .sidebar ul li a.active {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* 語言切換按鈕 */
+    .lang-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .lang-toggle:hover {
+      background: rgba(0, 0, 0, 0.9);
+      transform: scale(1.05);
+    }
+
+    /* 遊戲容器樣式 */
+    .game-content {
+      margin-left: 250px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .game-title {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .game-stats {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 800px;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    .game-container {
+      position: relative;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 800px;
+      margin-bottom: 20px;
+    }
+
+    .controls button,
+    .overlay-content button {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    .controls button:hover,
+    .overlay-content button:hover {
+      background: #2980b9;
+    }
+
+    .difficulty {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .difficulty select {
+      padding: 5px 10px;
+      border-radius: 5px;
+      background: #333;
+      color: white;
+      border: 1px solid #555;
+    }
+
+    .instructions {
+      margin-top: 10px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      text-align: left;
+      backdrop-filter: blur(5px);
+      max-width: 800px;
+      width: 100%;
+    }
+
+    .instructions p {
+      margin-bottom: 10px;
+      color: #ddd;
+    }
+
+    /* 響應式設計 */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 200px;
+      }
+
+      .game-content {
+        margin-left: 200px;
+        padding: 20px;
+      }
+
+      .nav-logo img {
+        width: 50px;
+        height: 50px;
+      }
+
+      .nav-logo span {
+        font-size: 1rem;
+      }
+
+      .game-title {
+        font-size: 2rem;
+      }
+      
+      .game-container canvas {
+        width: 100%;
+        height: auto;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 10px;
+      }
+
+      .game-content {
+        margin-left: 0;
+        padding: 15px;
+      }
+
+      .nav-logo {
+        justify-content: center;
+      }
+
+      .sidebar ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .sidebar ul li {
+        margin: 5px;
+      }
+      
+      .game-stats,
+      .controls {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="sidebar">
+    <div class="nav-logo">
+      <img src="../../public/images/Jeffery2.jpg" alt="Jeffery HU" class="avatar">
+      <span>Jeffery HU</span>
+    </div>
+    <ul>
+      <li><a href="../index.html"><i class="fa-solid fa-house"></i> <span id="nav-home">首頁</span></a></li>
+      <li><a href="../about.html"><i class="fa-solid fa-user"></i> <span id="nav-about">關於我</span></a></li>
+      <li><a href="../experience.html"><i class="fa-solid fa-briefcase"></i> <span id="nav-experience">經歷</span></a></li>
+      <li><a href="../portfolio.html"><i class="fa-solid fa-image"></i> <span id="nav-portfolio">作品集</span></a></li>
+      <li><a href="../skills.html"><i class="fa-solid fa-lightbulb"></i> <span id="nav-skills">技能</span></a></li>
+      <li><a href="index.html" class="active"><i class="fa-solid fa-gamepad"></i> <span id="nav-games">遊戲間</span></a></li>
+      <li><a href="../contact.html"><i class="fa-solid fa-envelope"></i> <span id="nav-contact">聯絡我</span></a></li>
+    </ul>
+  </nav>
+  
+  <div class="background-animation">
+    <!-- 動態生成的粒子 -->
+  </div>
+
+  <!-- 語言切換按鈕 -->
+  <button id="lang-toggle" class="lang-toggle">
+    <span>EN</span>
+  </button>
+  
+  <div class="game-content">
+    <div class="game-info">
+      <h1 id="game-title">打磚塊遊戲</h1>
+      <div id="score-container"><span id="score-label">得分</span><span class="colon">:</span> <span id="score">0</span></div>
+      <div id="lives-container"><span id="lives-label">生命</span><span class="colon">:</span> <span id="lives">3</span></div>
+      <div id="level-container"><span id="level-label">關卡</span><span class="colon">:</span> <span id="level">1</span></div>
+    </div>
+        
+    <div class="game-container">
+      <canvas id="gameCanvas" width="800" height="500"></canvas>
+      
+      <div id="start-screen" class="overlay">
+        <div class="overlay-content">
+          <h2 id="start-title">打磚塊遊戲</h2>
+          <p id="start-instruction-1">使用滑鼠或左右方向鍵移動擋板</p>
+          <p id="start-instruction-2">打破所有磚塊進入下一關</p>
+          <button id="start-button">開始遊戲</button>
+        </div>
+      </div>
+      
+      <div id="level-complete" class="overlay">
+        <div class="overlay-content">
+          <h2 id="level-complete-title">關卡完成！</h2>
+          <p id="level-score-text">得分: <span id="level-score">0</span></p>
+          <button id="next-level-button">下一關</button>
+        </div>
+      </div>
+      
+      <div id="game-over" class="overlay">
+        <div class="overlay-content">
+          <h2 id="game-over-title">遊戲結束</h2>
+          <p id="final-score-text">最終得分: <span id="final-score">0</span></p>
+          <p id="final-level-text">最高關卡: <span id="final-level">0</span></p>
+          <button id="restart-button">重新開始</button>
+        </div>
+      </div>
+      
+      <div id="pause-screen" class="overlay">
+        <div class="overlay-content">
+          <h2 id="pause-title">遊戲暫停</h2>
+          <p id="pause-text">按 P 鍵或點擊下方按鈕繼續</p>
+          <button id="resume-button">繼續遊戲</button>
+        </div>
+      </div>
+    </div>
+        
+    <div class="controls">
+      <button id="pause-button">暫停</button>
+      <div class="difficulty">
+        <span id="ball-speed-label">球速: </span>
+        <select id="speed-select">
+          <option value="slow" id="speed-slow">慢</option>
+          <option value="normal" selected id="speed-normal">中</option>
+          <option value="fast" id="speed-fast">快</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="instructions">
+      <p id="instruction-1">使用滑鼠或左右方向鍵移動擋板</p>
+      <p id="instruction-2">按 P 鍵暫停遊戲</p>
+    </div>
+  </div>
+  
+  <!-- 載入 i18n.js -->
+  <script src="../js/i18n.js"></script>
+  
+  <script>
+    // 動畫背景粒子效果
+    const particles = [];
+    const numParticles = 80;
+
+    function createParticle() {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      
+      // 隨機位置
+      particle.style.left = Math.random() * 100 + 'vw';
+      particle.style.top = Math.random() * 100 + 'vh';
+      
+      // 隨機大小 - 更大的粒子
+      const size = Math.random() * 15 + 8;
+      particle.style.width = particle.style.height = size + 'px';
+      
+      // 隨機延遲
+      particle.style.animationDelay = Math.random() * 8 + 's';
+      
+      // 隨機動畫持續時間
+      const duration = Math.random() * 10 + 10;
+      particle.style.animationDuration = duration + 's';
+      
+      return particle;
+    }
+
+    // 頁面載入後初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      // 創建粒子動畫
+      for (let i = 0; i < numParticles; i++) {
+        const particle = createParticle();
+        document.querySelector('.background-animation').appendChild(particle);
+        particles.push(particle);
+      }
+      
+      // 初始化多語言系統
+      window.i18n.init();
+      
+      // 定義打磚塊遊戲特定的翻譯
+      window.gameTranslations = {
+        zh: {
+          // 遊戲文本
+          'game-title': '打磚塊遊戲',
+          'score-label': '得分',
+          'lives-label': '生命',
+          'level-label': '關卡',
+          'pause-button': '暫停',
+          'ball-speed-label': '球速:',
+          'speed-slow': '慢',
+          'speed-normal': '中',
+          'speed-fast': '快',
+          'start-title': '打磚塊遊戲',
+          'start-instruction-1': '使用滑鼠或左右方向鍵移動擋板',
+          'start-instruction-2': '打破所有磚塊進入下一關',
+          'start-button': '開始遊戲',
+          'level-complete-title': '關卡完成！',
+          'level-score-text': '得分:',
+          'next-level-button': '下一關',
+          'game-over-title': '遊戲結束',
+          'final-score-text': '最終得分:',
+          'final-level-text': '最高關卡:',
+          'restart-button': '重新開始',
+          'pause-title': '遊戲暫停',
+          'pause-text': '按 P 鍵或點擊下方按鈕繼續',
+          'resume-button': '繼續遊戲',
+          'instruction-1': '使用滑鼠或左右方向鍵移動擋板',
+          'instruction-2': '按 P 鍵暫停遊戲',
+          
+          // 導航列項目
+          'nav-home': '首頁',
+          'nav-about': '關於我',
+          'nav-experience': '經歷',
+          'nav-portfolio': '作品集',
+          'nav-skills': '技能',
+          'nav-games': '遊戲間',
+          'nav-contact': '聯絡我'
+        },
+        en: {
+          // 遊戲文本
+          'game-title': 'Breakout Game',
+          'score-label': 'Score',
+          'lives-label': 'Lives',
+          'level-label': 'Level',
+          'pause-button': 'Pause',
+          'ball-speed-label': 'Ball Speed:',
+          'speed-slow': 'Slow',
+          'speed-normal': 'Normal',
+          'speed-fast': 'Fast',
+          'start-title': 'Breakout Game',
+          'start-instruction-1': 'Use mouse or arrow keys to move the paddle',
+          'start-instruction-2': 'Break all bricks to advance to the next level',
+          'start-button': 'Start Game',
+          'level-complete-title': 'Level Complete!',
+          'level-score-text': 'Score:',
+          'next-level-button': 'Next Level',
+          'game-over-title': 'Game Over',
+          'final-score-text': 'Final Score:',
+          'final-level-text': 'Highest Level:',
+          'restart-button': 'Restart',
+          'pause-title': 'Game Paused',
+          'pause-text': 'Press P or click the button below to continue',
+          'resume-button': 'Resume Game',
+          'instruction-1': 'Use mouse or arrow keys to move the paddle',
+          'instruction-2': 'Press P to pause the game',
+          
+          // 導航列項目
+          'nav-home': 'Home',
+          'nav-about': 'About',
+          'nav-experience': 'Experience',
+          'nav-portfolio': 'Portfolio',
+          'nav-skills': 'Skills',
+          'nav-games': 'Game Room',
+          'nav-contact': 'Contact'
+        }
+      };
+      
+      // 更新遊戲文本
+      function updateGameText() {
+        const lang = window.i18n.lang;
+        const translations = gameTranslations[lang];
+        
+        // 更新遊戲文本
+        document.getElementById('game-title').textContent = translations['game-title'];
+        document.getElementById('score-label').textContent = translations['score-label'];
+        document.getElementById('lives-label').textContent = translations['lives-label'];
+        document.getElementById('level-label').textContent = translations['level-label'];
+        document.getElementById('pause-button').textContent = translations['pause-button'];
+        document.getElementById('ball-speed-label').textContent = translations['ball-speed-label'];
+        document.getElementById('speed-slow').textContent = translations['speed-slow'];
+        document.getElementById('speed-normal').textContent = translations['speed-normal'];
+        document.getElementById('speed-fast').textContent = translations['speed-fast'];
+        document.getElementById('start-title').textContent = translations['start-title'];
+        document.getElementById('start-instruction-1').textContent = translations['start-instruction-1'];
+        document.getElementById('start-instruction-2').textContent = translations['start-instruction-2'];
+        document.getElementById('start-button').textContent = translations['start-button'];
+        document.getElementById('level-complete-title').textContent = translations['level-complete-title'];
+        document.getElementById('level-score-text').textContent = translations['level-score-text'] + ' ';
+        document.getElementById('next-level-button').textContent = translations['next-level-button'];
+        document.getElementById('game-over-title').textContent = translations['game-over-title'];
+        document.getElementById('final-score-text').textContent = translations['final-score-text'] + ' ';
+        document.getElementById('final-level-text').textContent = translations['final-level-text'] + ' ';
+        document.getElementById('restart-button').textContent = translations['restart-button'];
+        document.getElementById('pause-title').textContent = translations['pause-title'];
+        document.getElementById('pause-text').textContent = translations['pause-text'];
+        document.getElementById('resume-button').textContent = translations['resume-button'];
+        document.getElementById('instruction-1').textContent = translations['instruction-1'];
+        document.getElementById('instruction-2').textContent = translations['instruction-2'];
+        
+        // 處理冒號顯示
+        const colons = document.querySelectorAll('.colon');
+        colons.forEach(colon => {
+          // 英文使用冒號加空格，中文只使用冒號
+          colon.textContent = lang === 'en' ? ': ' : '：';
+        });
+        
+        // 移除冒號後的空格（如果是中文）
+        if (lang === 'zh') {
+          const containers = ['score-container', 'lives-container', 'level-container'];
+          containers.forEach(id => {
+            const container = document.getElementById(id);
+            if (container) {
+              container.innerHTML = container.innerHTML.replace(/：\s+/g, '：');
+            }
+          });
+        }
+        
+        // 更新導航列項目
+        document.getElementById('nav-home').textContent = translations['nav-home'];
+        document.getElementById('nav-about').textContent = translations['nav-about'];
+        document.getElementById('nav-experience').textContent = translations['nav-experience'];
+        document.getElementById('nav-portfolio').textContent = translations['nav-portfolio'];
+        document.getElementById('nav-skills').textContent = translations['nav-skills'];
+        document.getElementById('nav-games').textContent = translations['nav-games'];
+        document.getElementById('nav-contact').textContent = translations['nav-contact'];
+      }
+      
+      // 創建一個新的語言切換按鈕函數
+      function setupLangToggle() {
+        const langBtn = document.getElementById('lang-toggle');
+        if (!langBtn) return;
+        
+        // 移除所有可能存在的事件監聽器
+        const newButton = langBtn.cloneNode(true);
+        langBtn.parentNode.replaceChild(newButton, langBtn);
+        
+        // 為新按鈕添加事件處理
+        newButton.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          console.log('語言切換按鈕被點擊，當前語言:', window.i18n.lang);
+          
+          // 切換語言
+          window.i18n.lang = window.i18n.lang === 'zh' ? 'en' : 'zh';
+          
+          // 保存偏好設定
+          localStorage.setItem('preferred-language', window.i18n.lang);
+          
+          // 更新按鈕文字
+          const langText = newButton.querySelector('span');
+          if (langText) {
+            langText.textContent = window.i18n.lang === 'zh' ? 'EN' : '繁';
+            console.log('設置按鈕文字為:', langText.textContent);
+          }
+          
+          // 更新遊戲文本
+          updateGameText();
+          return false;
+        });
+        
+        // 設置正確的按鈕文字
+        const langText = newButton.querySelector('span');
+        if (langText) {
+          const buttonText = window.i18n.lang === 'zh' ? 'EN' : '繁';
+          langText.textContent = buttonText;
+          console.log('初始設置按鈕文字為:', buttonText);
+        }
+      }
+      
+      // 初始化語言切換按鈕
+      setupLangToggle();
+      
+      // 初始更新文本
+      updateGameText();
+    });
+  </script>
+  
+  <script src="breakout-game.js"></script>
+</body>
+</html>

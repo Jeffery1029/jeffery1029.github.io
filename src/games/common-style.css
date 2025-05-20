@@ -1,0 +1,43 @@
+.nav-bar {
+    background-color: #2d3436;
+    color: white;
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.nav-bar .home-link a {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    transition: color 0.3s;
+    padding: 5px 15px;
+}
+
+.nav-bar .home-link a:hover {
+    color: #00cec9;
+}
+
+.nav-bar .home-link i {
+    margin-right: 8px;
+    font-size: 1.2em;
+}
+
+/* 為了避免導航欄遮擋內容，添加頂部間距 */
+body {
+    padding-top: 60px;
+}
+
+/* 移除舊的遊戲標題，因為我們將使用頁面中的 h1 */
+.nav-bar .game-title {
+    display: none;
+} 

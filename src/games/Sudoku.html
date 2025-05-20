@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="數獨遊戲 - 個人資訊網站">
+  <meta property="og:title" content="數獨遊戲">
+  <meta property="og:description" content="填充數字，訓練你的邏輯思維能力。">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="sudoku-style.css">
+  <title id="page-title">數獨遊戲 | 個人資訊網站</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #000;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* 動畫背景 */
+    .background-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      background: linear-gradient(135deg, #000428, #004e92);
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.4);
+      animation: float 15s infinite linear;
+    }
+
+    .particle:nth-child(even) {
+      background: rgba(255, 105, 0, 0.6);
+      box-shadow: 0 0 12px 3px rgba(255, 105, 0, 0.3);
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) translateX(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) translateX(100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* 導航欄樣式 */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-logo img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .nav-logo span {
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar ul li {
+      margin: 5px 0;
+    }
+
+    .sidebar ul li a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      font-size: 14px;
+    }
+
+    .sidebar ul li a:hover,
+    .sidebar ul li a.active {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* 語言切換按鈕 */
+    .lang-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .lang-toggle:hover {
+      background: rgba(0, 0, 0, 0.9);
+      transform: scale(1.05);
+    }
+
+    /* 遊戲容器樣式 */
+    .game-content {
+      margin-left: 250px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .game-title {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .game-area {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    @media (min-width: 768px) {
+      .game-area {
+        flex-direction: row;
+      }
+    }
+
+    .game-instructions {
+      margin-top: 20px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      text-align: left;
+      backdrop-filter: blur(5px);
+      max-width: 800px;
+      width: 100%;
+    }
+
+    .game-instructions h3 {
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .game-instructions p, .game-instructions ul {
+      margin-bottom: 15px;
+      color: #ddd;
+    }
+
+    .game-instructions ul {
+      padding-left: 20px;
+    }
+
+    .game-instructions li {
+      margin-bottom: 5px;
+    }
+
+    /* 響應式設計 */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 200px;
+      }
+
+      .game-content {
+        margin-left: 200px;
+        padding: 20px;
+      }
+
+      .nav-logo img {
+        width: 50px;
+        height: 50px;
+      }
+
+      .nav-logo span {
+        font-size: 1rem;
+      }
+
+      .game-title {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 10px;
+      }
+
+      .game-content {
+        margin-left: 0;
+        padding: 15px;
+      }
+
+      .nav-logo {
+        justify-content: center;
+      }
+
+      .sidebar ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .sidebar ul li {
+        margin: 5px;
+      }
+    }
+  </style>
+<body>
+  <nav class="sidebar">
+    <div class="nav-logo">
+      <img src="../../public/images/Jeffery2.jpg" alt="Jeffery HU" class="avatar">
+      <span>Jeffery HU</span>
+    </div>
+    <ul>
+      <li><a href="../index.html"><i class="fa-solid fa-house"></i> <span id="nav-home">首頁</span></a></li>
+      <li><a href="../about.html"><i class="fa-solid fa-user"></i> <span id="nav-about">關於我</span></a></li>
+      <li><a href="../experience.html"><i class="fa-solid fa-briefcase"></i> <span id="nav-experience">經歷</span></a></li>
+      <li><a href="../portfolio.html"><i class="fa-solid fa-image"></i> <span id="nav-portfolio">作品集</span></a></li>
+      <li><a href="../skills.html"><i class="fa-solid fa-lightbulb"></i> <span id="nav-skills">技能</span></a></li>
+      <li><a href="index.html" class="active"><i class="fa-solid fa-gamepad"></i> <span id="nav-games">遊戲間</span></a></li>
+      <li><a href="../contact.html"><i class="fa-solid fa-envelope"></i> <span id="nav-contact">聯絡我</span></a></li>
+    </ul>
+  </nav>
+  
+  <div class="background-animation">
+    <!-- 動態生成的粒子 -->
+  </div>
+
+  <!-- 語言切換按鈕 -->
+  <button id="lang-toggle" class="lang-toggle">
+    <span>EN</span>
+  </button>
+  <div class="game-content">
+    <h1 class="game-title" id="game-title">數獨遊戲</h1>
+    <div class="game-area">
+      <div class="game-info">
+        <div class="difficulty-container">
+          <label for="difficulty" id="difficulty-label">難度：</label>
+          <select id="difficulty">
+            <option value="easy" id="difficulty-easy">簡單</option>
+            <option value="medium" selected id="difficulty-medium">中等</option>
+            <option value="hard" id="difficulty-hard">困難</option>
+            <option value="expert" id="difficulty-expert">專家</option>
+          </select>
+        </div>
+        
+        <div class="timer-container">
+          <div class="timer-label" id="timer-label">時間</div>
+          <div id="timer">00:00</div>
+        </div>
+        
+        <div class="controls">
+          <button id="new-game-btn">新遊戲</button>
+          <button id="check-btn">檢查</button>
+          <button id="hint-btn">提示</button>
+          <button id="solve-btn">解答</button>
+        </div>
+        
+        <div class="status-message" id="status-message"></div>
+      </div>
+      
+      <div class="game-board-container">
+        <div id="sudoku-board" class="sudoku-board"></div>
+                
+        <div class="number-pad">
+          <button class="number-btn" data-number="1" id="num-1">1</button>
+          <button class="number-btn" data-number="2" id="num-2">2</button>
+          <button class="number-btn" data-number="3" id="num-3">3</button>
+          <button class="number-btn" data-number="4" id="num-4">4</button>
+          <button class="number-btn" data-number="5" id="num-5">5</button>
+          <button class="number-btn" data-number="6" id="num-6">6</button>
+          <button class="number-btn" data-number="7" id="num-7">7</button>
+          <button class="number-btn" data-number="8" id="num-8">8</button>
+          <button class="number-btn" data-number="9" id="num-9">9</button>
+          <button class="number-btn" data-number="0" id="num-clear">清除</button>
+          <button class="number-btn" data-number="notes" id="num-notes">筆記</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="game-instructions">
+      <h3 id="rules-title">遊戲規則：</h3>
+      <p id="rules-content">在每一行、每一列和每個 3x3 宮格中填入 1-9 的數字，使每個數字在每行、每列和每個宮格中只出現一次。</p>
+      <h3 id="instructions-title">操作說明：</h3>
+      <ul>
+        <li id="instruction-1">點擊格子選中，然後點擊數字或按鍵盤數字鍵輸入</li>
+        <li id="instruction-2">點擊「筆記」按鈕切換筆記模式</li>
+        <li id="instruction-3">點擊「提示」獲取一個正確的數字</li>
+        <li id="instruction-4">點擊「檢查」檢查當前填寫是否正確</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="modal" id="game-complete-modal">
+    <div class="modal-content">
+      <h2 id="congrats-title">恭喜！</h2>
+      <p id="congrats-message">你成功完成了數獨！</p>
+      <p id="time-used-label">用時：<span id="completion-time">00:00</span></p>
+      <button id="play-again-btn">再玩一次</button>
+    </div>
+  </div>
+  
+  <!-- 隱藏的翻譯文本元素 -->
+  <div style="display: none;">
+    <span id="new-game-start">開始新的</span>
+    <span id="difficulty-game">難度遊戲！</span>
+  </div>
+    
+    <!-- 載入 i18n.js -->
+    <script src="../js/i18n.js"></script>
+    
+    <script>
+      // 動畫背景粒子效果
+      const particles = [];
+      const numParticles = 80;
+
+      function createParticle() {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        // 隨機位置
+        particle.style.left = Math.random() * 100 + 'vw';
+        particle.style.top = Math.random() * 100 + 'vh';
+        
+        // 隨機大小 - 更大的粒子
+        const size = Math.random() * 15 + 8;
+        particle.style.width = particle.style.height = size + 'px';
+        
+        // 隨機延遲
+        particle.style.animationDelay = Math.random() * 8 + 's';
+        
+        // 隨機動畫持續時間
+        const duration = Math.random() * 10 + 10;
+        particle.style.animationDuration = duration + 's';
+        
+        return particle;
+      }
+
+      // 頁面載入後初始化
+      document.addEventListener('DOMContentLoaded', function() {
+        // 創建粒子動畫
+        for (let i = 0; i < numParticles; i++) {
+          const particle = createParticle();
+          document.querySelector('.background-animation').appendChild(particle);
+          particles.push(particle);
+        }
+        
+        // 初始化多語言系統
+        window.i18n.init();
+        
+        // 定義數獨遊戲特定的翻譯
+        window.gameTranslations = {
+          zh: {
+            // 遊戲文本
+            'game-title': '數獨遊戲',
+            'difficulty-label': '難度：',
+            'difficulty-easy': '簡單',
+            'difficulty-medium': '中等',
+            'difficulty-hard': '困難',
+            'difficulty-expert': '專家',
+            'timer-label': '時間',
+            'new-game-btn': '新遊戲',
+            'check-btn': '檢查',
+            'hint-btn': '提示',
+            'solve-btn': '解答',
+            'num-clear': '清除',
+            'num-notes': '筆記',
+            'rules-title': '遊戲規則：',
+            'rules-content': '在每一行、每一列和每個 3x3 宮格中填入 1-9 的數字，使每個數字在每行、每列和每個宮格中只出現一次。',
+            'instructions-title': '操作說明：',
+            'instruction-1': '點擊格子選中，然後點擊數字或按鍵盤數字鍵輸入',
+            'instruction-2': '點擊「筆記」按鈕切換筆記模式',
+            'instruction-3': '點擊「提示」獲取一個正確的數字',
+            'instruction-4': '點擊「檢查」檢查當前填寫是否正確',
+            'congrats-title': '恭喜！',
+            'congrats-message': '你成功完成了數獨！',
+            'time-used-label': '用時：',
+            'play-again-btn': '再玩一次',
+            'new-game-start': '開始新的',
+            'difficulty-game': '難度遊戲！',
+            
+            // 導航列項目
+            'nav-home': '首頁',
+            'nav-about': '關於我',
+            'nav-experience': '經歷',
+            'nav-portfolio': '作品集',
+            'nav-skills': '技能',
+            'nav-games': '遊戲間',
+            'nav-contact': '聯絡我'
+          },
+          en: {
+            // 遊戲文本
+            'game-title': 'Sudoku Game',
+            'difficulty-label': 'Difficulty:',
+            'difficulty-easy': 'Easy',
+            'difficulty-medium': 'Medium',
+            'difficulty-hard': 'Hard',
+            'difficulty-expert': 'Expert',
+            'timer-label': 'Time',
+            'new-game-btn': 'New Game',
+            'check-btn': 'Check',
+            'hint-btn': 'Hint',
+            'solve-btn': 'Solve',
+            'num-clear': 'Clear',
+            'num-notes': 'Notes',
+            'rules-title': 'Game Rules:',
+            'rules-content': 'Fill in the grid with digits 1-9 so that each row, column, and 3x3 box contains each digit exactly once.',
+            'instructions-title': 'How to Play:',
+            'instruction-1': 'Click a cell to select it, then click a number or press a number key',
+            'instruction-2': 'Click the "Notes" button to toggle note mode',
+            'instruction-3': 'Click "Hint" to get a correct number',
+            'instruction-4': 'Click "Check" to verify your current entries',
+            'congrats-title': 'Congratulations!',
+            'congrats-message': 'You have successfully completed the Sudoku!',
+            'time-used-label': 'Time used:',
+            'play-again-btn': 'Play Again',
+            'new-game-start': 'Starting a new',
+            'difficulty-game': 'difficulty game!',
+            
+            // 導航列項目
+            'nav-home': 'Home',
+            'nav-about': 'About',
+            'nav-experience': 'Experience',
+            'nav-portfolio': 'Portfolio',
+            'nav-skills': 'Skills',
+            'nav-games': 'Game Room',
+            'nav-contact': 'Contact'
+          }
+        };
+        
+        // 更新遊戲文本
+        function updateGameText() {
+          const lang = window.i18n.lang;
+          const translations = gameTranslations[lang];
+          
+          // 更新遊戲文本
+          document.getElementById('game-title').textContent = translations['game-title'];
+          document.getElementById('difficulty-label').textContent = translations['difficulty-label'];
+          document.getElementById('difficulty-easy').textContent = translations['difficulty-easy'];
+          document.getElementById('difficulty-medium').textContent = translations['difficulty-medium'];
+          document.getElementById('difficulty-hard').textContent = translations['difficulty-hard'];
+          document.getElementById('difficulty-expert').textContent = translations['difficulty-expert'];
+          document.getElementById('timer-label').textContent = translations['timer-label'];
+          document.getElementById('new-game-btn').textContent = translations['new-game-btn'];
+          document.getElementById('check-btn').textContent = translations['check-btn'];
+          document.getElementById('hint-btn').textContent = translations['hint-btn'];
+          document.getElementById('solve-btn').textContent = translations['solve-btn'];
+          document.getElementById('num-clear').textContent = translations['num-clear'];
+          document.getElementById('num-notes').textContent = translations['num-notes'];
+          document.getElementById('rules-title').textContent = translations['rules-title'];
+          document.getElementById('rules-content').textContent = translations['rules-content'];
+          document.getElementById('instructions-title').textContent = translations['instructions-title'];
+          document.getElementById('instruction-1').textContent = translations['instruction-1'];
+          document.getElementById('instruction-2').textContent = translations['instruction-2'];
+          document.getElementById('instruction-3').textContent = translations['instruction-3'];
+          document.getElementById('instruction-4').textContent = translations['instruction-4'];
+          document.getElementById('congrats-title').textContent = translations['congrats-title'];
+          document.getElementById('congrats-message').textContent = translations['congrats-message'];
+          document.getElementById('time-used-label').textContent = translations['time-used-label'] + ' ';
+          document.getElementById('play-again-btn').textContent = translations['play-again-btn'];
+          
+          // 更新導航列項目
+          document.getElementById('nav-home').textContent = translations['nav-home'];
+          document.getElementById('nav-about').textContent = translations['nav-about'];
+          document.getElementById('nav-experience').textContent = translations['nav-experience'];
+          document.getElementById('nav-portfolio').textContent = translations['nav-portfolio'];
+          document.getElementById('nav-skills').textContent = translations['nav-skills'];
+          document.getElementById('nav-games').textContent = translations['nav-games'];
+          document.getElementById('nav-contact').textContent = translations['nav-contact'];
+          
+          // 更新隱藏的翻譯文本元素
+          document.getElementById('new-game-start').textContent = translations['new-game-start'];
+          document.getElementById('difficulty-game').textContent = translations['difficulty-game'];
+          
+          // 更新狀態消息
+          const statusMessage = document.getElementById('status-message');
+          if (statusMessage && (statusMessage.textContent.includes('開始新的') || statusMessage.textContent.includes('Starting a new'))) {
+            const difficulty = document.getElementById('difficulty').value;
+            
+            // 使用翻譯的難度文字
+            let difficultyText;
+            switch (difficulty) {
+              case 'easy': difficultyText = translations['difficulty-easy']; break;
+              case 'medium': difficultyText = translations['difficulty-medium']; break;
+              case 'hard': difficultyText = translations['difficulty-hard']; break;
+              case 'expert': difficultyText = translations['difficulty-expert']; break;
+              default: difficultyText = translations['difficulty-medium'];
+            }
+            
+            statusMessage.textContent = `${translations['new-game-start']} ${difficultyText} ${translations['difficulty-game']}`;
+          }
+        }
+        
+        // 獲取難度文字
+        function getDifficultyText(difficulty) {
+          const lang = window.i18n.lang;
+          const translations = gameTranslations[lang];
+          
+          switch (difficulty) {
+            case 'easy': return translations['difficulty-easy'];
+            case 'medium': return translations['difficulty-medium'];
+            case 'hard': return translations['difficulty-hard'];
+            case 'expert': return translations['difficulty-expert'];
+            default: return translations['difficulty-medium'];
+          }
+        }
+        
+        // 創建一個新的語言切換按鈕函數
+        function setupLangToggle() {
+          const langBtn = document.getElementById('lang-toggle');
+          if (!langBtn) return;
+          
+          // 移除所有可能存在的事件監聽器
+          const newButton = langBtn.cloneNode(true);
+          langBtn.parentNode.replaceChild(newButton, langBtn);
+          
+          // 為新按鈕添加事件處理
+          newButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('語言切換按鈕被點擊，當前語言:', window.i18n.lang);
+            
+            // 切換語言
+            window.i18n.lang = window.i18n.lang === 'zh' ? 'en' : 'zh';
+            
+            // 保存偏好設定
+            localStorage.setItem('preferred-language', window.i18n.lang);
+            
+            // 更新按鈕文字
+            const langText = newButton.querySelector('span');
+            if (langText) {
+              langText.textContent = window.i18n.lang === 'zh' ? 'EN' : '繁';
+              console.log('設置按鈕文字為:', langText.textContent);
+            }
+            
+            // 更新遊戲文本
+            updateGameText();
+            return false;
+          });
+          
+          // 設置正確的按鈕文字
+          const langText = newButton.querySelector('span');
+          if (langText) {
+            const buttonText = window.i18n.lang === 'zh' ? 'EN' : '繁';
+            langText.textContent = buttonText;
+            console.log('初始設置按鈕文字為:', buttonText);
+          }
+        }
+        
+        // 初始化語言切換按鈕
+        setupLangToggle();
+        
+        // 初始更新文本
+        updateGameText();
+      });
+    </script>
+    
+    <script src="sudoku-game.js"></script>
+</body>
+</html>

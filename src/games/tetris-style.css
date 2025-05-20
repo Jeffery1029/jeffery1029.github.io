@@ -1,0 +1,253 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    width: 100%;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    color: #333;
+    font-size: 2.5rem;
+}
+
+.game-area {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.game-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    min-width: 150px;
+}
+
+.score-box, .level-box, .lines-box, .next-piece-box {
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.score-label, .level-label, .lines-label, .next-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+#score, #level, #lines {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.next-piece-box {
+    height: 120px;
+}
+
+#next-piece-container {
+    width: 100px;
+    height: 80px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#reset-button {
+    background-color: #f44336;
+}
+
+#reset-button:hover {
+    background-color: #d32f2f;
+}
+
+.game-board-container {
+    position: relative;
+}
+
+#game-board {
+    background-color: #111;
+    border: 2px solid #333;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.game-message {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: none;
+}
+
+.game-message h2 {
+    margin-bottom: 15px;
+    font-size: 2rem;
+}
+
+.game-message p {
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+}
+
+.game-message button {
+    padding: 12px 24px;
+    font-size: 1.1rem;
+}
+
+.instructions {
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.instructions h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.instructions ul {
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.instructions li {
+    background-color: #f5f5f5;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.mobile-controls {
+    display: none;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.mobile-controls button {
+    padding: 15px 0;
+    font-size: 1.2rem;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .game-area {
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+    
+    .game-info {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .score-box, .level-box, .lines-box {
+        min-width: 100px;
+    }
+    
+    .next-piece-box {
+        width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+    }
+    
+    .controls {
+        width: 100%;
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    .mobile-controls {
+        display: grid;
+    }
+    
+    .instructions ul {
+        flex-direction: column;
+    }
+}
+
+/* 方塊顏色 */
+.piece-I {
+    background-color: #00f0f0;
+}
+
+.piece-O {
+    background-color: #f0f000;
+}
+
+.piece-T {
+    background-color: #a000f0;
+}
+
+.piece-S {
+    background-color: #00f000;
+}
+
+.piece-Z {
+    background-color: #f00000;
+}
+
+.piece-J {
+    background-color: #0000f0;
+}
+
+.piece-L {
+    background-color: #f0a000;
+} 
