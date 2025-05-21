@@ -259,7 +259,7 @@ window.i18n = {
         
         // index.html
         'intro-title': '哈囉，我是 Jeffery',
-        'intro-desc': '一位專業的網站／程式／APP開發者，熱愛 AI技術以及創新與分享。',
+        'intro-desc': '一位專業的網站／程式／APP開發者，熱愛 AI 技術以及創新與分享。',
         'featured-works-title': '精選作品',
         'news-title': '最新消息',
         'news': '近期動態',
