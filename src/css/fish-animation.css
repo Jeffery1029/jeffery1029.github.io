@@ -1,0 +1,334 @@
+/* 小魚動畫樣式 */
+.swimming-fish {
+  position: fixed;
+  width: 80px;
+  height: 50px;
+  z-index: 1000;
+  pointer-events: none; /* 確保魚不會干擾用戶的點擊 */
+  transition: transform 0.2s ease-out;
+  transform-origin: center center;
+}
+
+/* 魚身體 */
+.fish-body {
+  position: absolute;
+  width: 50px;
+  height: 25px;
+  background: linear-gradient(to left, #ff6a00, #ffb700);
+  border-radius: 60% 40% 40% 60%;
+  top: 10px;
+  left: 25px;
+  animation: fishBody 3s infinite alternate;
+  box-shadow: 0 0 8px rgba(255, 127, 0, 0.5);
+  overflow: hidden;
+}
+
+/* 藍色魚身體 */
+.fish-blue .fish-body {
+  background: linear-gradient(to left, #0066ff, #00ccff);
+  box-shadow: 0 0 8px rgba(0, 102, 255, 0.5);
+}
+
+/* 紅色魚身體 */
+.fish-red .fish-body {
+  background: linear-gradient(to left, #ff0033, #ff6666);
+  box-shadow: 0 0 8px rgba(255, 0, 51, 0.5);
+}
+
+/* 紫色魚身體 */
+.fish-purple .fish-body {
+  background: linear-gradient(to left, #6600cc, #9966ff);
+  box-shadow: 0 0 8px rgba(102, 0, 204, 0.5);
+}
+
+/* 棕色魚身體 */
+.fish-brown .fish-body {
+  background: linear-gradient(to left, #663300, #996633);
+  box-shadow: 0 0 8px rgba(102, 51, 0, 0.5);
+}
+
+/* 白色魚身體 */
+.fish-white .fish-body {
+  background: linear-gradient(to left, #e6e6e6, #ffffff);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+}
+
+/* 灰色魚身體 */
+.fish-gray .fish-body {
+  background: linear-gradient(to left, #666666, #999999);
+  box-shadow: 0 0 8px rgba(102, 102, 102, 0.5);
+}
+
+.fish-body::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent 70%, rgba(255, 255, 255, 0.7) 75%, transparent 80%);
+  background-size: 200% 100%;
+  animation: fishShine 4s infinite linear;
+}
+
+/* 魚尾 */
+.fish-tail {
+  position: absolute;
+  width: 55px;
+  height: 30px;
+  background: linear-gradient(to left, #ff8800, #ffcc00);
+  border-radius: 0 0 0 50%;
+  clip-path: polygon(100% 0, 0 30%, 0 70%, 100% 100%);
+  top: 7px;
+  left: -10px;
+  transform-origin: 100% 50%;
+  animation: fishTail 0.8s infinite alternate;
+  transform: rotate(180deg);
+}
+
+/* 藍色魚尾 */
+.fish-blue .fish-tail {
+  background: linear-gradient(to left, #0055cc, #33ccff);
+}
+
+/* 紅色魚尾 */
+.fish-red .fish-tail {
+  background: linear-gradient(to left, #cc0033, #ff3366);
+}
+
+/* 紫色魚尾 */
+.fish-purple .fish-tail {
+  background: linear-gradient(to left, #5500aa, #aa66ff);
+}
+
+/* 棕色魚尾 */
+.fish-brown .fish-tail {
+  background: linear-gradient(to left, #552200, #aa7744);
+}
+
+/* 白色魚尾 */
+.fish-white .fish-tail {
+  background: linear-gradient(to left, #d9d9d9, #ffffff);
+}
+
+/* 灰色魚尾 */
+.fish-gray .fish-tail {
+  background: linear-gradient(to left, #555555, #aaaaaa);
+}
+
+/* 上鰭 */
+.fish-fin {
+  position: absolute;
+  width: 20px;
+  height: 15px;
+  background: rgba(255, 175, 0, 0.8);
+  border-radius: 50% 50% 0 0;
+  top: 0;
+  left: 40px;
+  transform-origin: 50% 100%;
+  animation: fishFin 3s infinite alternate;
+  clip-path: polygon(0 100%, 50% 0, 100% 100%);
+}
+
+/* 藍色魚鰭 */
+.fish-blue .fish-fin,
+.fish-blue .fish-bottom-fin,
+.fish-blue .fish-pectoral-fin {
+  background: rgba(0, 153, 255, 0.8);
+}
+
+/* 紅色魚鰭 */
+.fish-red .fish-fin,
+.fish-red .fish-bottom-fin,
+.fish-red .fish-pectoral-fin {
+  background: rgba(255, 51, 51, 0.8);
+}
+
+/* 紫色魚鰭 */
+.fish-purple .fish-fin,
+.fish-purple .fish-bottom-fin,
+.fish-purple .fish-pectoral-fin {
+  background: rgba(153, 51, 255, 0.8);
+}
+
+/* 棕色魚鰭 */
+.fish-brown .fish-fin,
+.fish-brown .fish-bottom-fin,
+.fish-brown .fish-pectoral-fin {
+  background: rgba(153, 102, 51, 0.8);
+}
+
+/* 白色魚鰭 */
+.fish-white .fish-fin,
+.fish-white .fish-bottom-fin,
+.fish-white .fish-pectoral-fin {
+  background: rgba(230, 230, 230, 0.8);
+}
+
+/* 灰色魚鰭 */
+.fish-gray .fish-fin,
+.fish-gray .fish-bottom-fin,
+.fish-gray .fish-pectoral-fin {
+  background: rgba(153, 153, 153, 0.8);
+}
+
+/* 下鰭 */
+.fish-bottom-fin {
+  position: absolute;
+  width: 15px;
+  height: 10px;
+  background: rgba(255, 175, 0, 0.8);
+  border-radius: 0 0 50% 50%;
+  bottom: 0;
+  left: 45px;
+  transform-origin: 50% 0;
+  animation: fishBottomFin 2.5s infinite alternate;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+/* 胸鰭 */
+.fish-pectoral-fin {
+  position: absolute;
+  width: 15px;
+  height: 12px;
+  background: rgba(255, 200, 0, 0.7);
+  border-radius: 50%;
+  top: 15px;
+  left: 60px;
+  transform-origin: 100% 50%;
+  animation: fishPectoralFin 1.5s infinite alternate;
+  clip-path: polygon(100% 50%, 0 0, 0 100%);
+}
+
+/* 魚眼 */
+.fish-eye {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: #000;
+  border-radius: 50%;
+  top: 10px;
+  right: 8px;
+  border: 1px solid white;
+}
+
+.fish-eye::after {
+  content: '';
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: white;
+  border-radius: 50%;
+  top: 1px;
+  left: 1px;
+}
+
+/* 氣泡 */
+.bubble {
+  position: absolute;
+  background: white;
+  border: 2px solid white;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: bubbleRise linear forwards;
+  box-shadow: 0 0 8px white, inset 0 0 5px white;
+  z-index: 1001;
+}
+
+/* 氣泡光澆效果 */
+.bubble::after {
+  content: '';
+  position: absolute;
+  width: 40%;
+  height: 40%;
+  background: white;
+  border-radius: 50%;
+  top: 20%;
+  left: 20%;
+  transform: rotate(-45deg);
+}
+
+@keyframes bubbleRise {
+  0% {
+    transform: translateY(0) scale(0.5);
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 0.9;
+    transform: translateY(-50px) scale(1.2) rotate(10deg);
+  }
+  100% {
+    transform: translateY(-120px) scale(1.5) rotate(20deg);
+    opacity: 0;
+  }
+}
+
+/* 動畫效果 */
+@keyframes fishTail {
+  0% {
+    transform: rotate(180deg) scaleX(1) rotate(-5deg);
+  }
+  100% {
+    transform: rotate(180deg) scaleX(0.8) rotate(5deg);
+  }
+}
+
+/* 轉向時的動畫效果 */
+.turning .fish-tail {
+  animation: fishTailTurning 0.3s ease-in-out 2;
+}
+
+@keyframes fishTailTurning {
+  0% {
+    transform: rotate(180deg) scaleX(1) rotate(-5deg);
+  }
+  50% {
+    transform: rotate(180deg) scaleX(0.6) rotate(15deg);
+  }
+  100% {
+    transform: rotate(180deg) scaleX(1) rotate(-5deg);
+  }
+}
+
+@keyframes fishBody {
+  0% {
+    transform: scaleY(1);
+  }
+  100% {
+    transform: scaleY(1.05);
+  }
+}
+
+@keyframes fishFin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(15deg);
+  }
+}
+
+@keyframes fishBottomFin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-10deg);
+  }
+}
+
+@keyframes fishPectoralFin {
+  0% {
+    transform: rotate(0deg) scaleX(1);
+  }
+  100% {
+    transform: rotate(10deg) scaleX(0.8);
+  }
+}
+
+@keyframes fishShine {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
